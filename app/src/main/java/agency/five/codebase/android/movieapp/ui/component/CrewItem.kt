@@ -21,23 +21,24 @@ fun CrewItem(
     modifier: Modifier = Modifier,
 )
 {
-    Column{
+    Column(
+        modifier = modifier
+    ){
         Text(
             text = crewItemViewState.name,
-            fontSize = 25.sp,
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
         )
         Text(
             text = crewItemViewState.job,
-            fontSize = 25.sp,
+            fontSize = 17.sp,
         )
     }
 }
 
 @Preview
 @Composable
-fun CrewItemPreview()
-{
+fun CrewItemPreview() {
     val crewman: Crewman = getCrewman()
     CrewItem(crewItemViewState = CrewItemViewState(name = crewman.name, job = crewman.job))
 
