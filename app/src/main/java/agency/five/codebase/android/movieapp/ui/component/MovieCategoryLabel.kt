@@ -2,10 +2,11 @@ package agency.five.codebase.android.movieapp.ui.component
 
 import agency.five.codebase.android.movieapp.R
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,7 @@ sealed class MovieCategoryLabelTextViewState{
 @Composable
 fun MovieCategoryLabel(
     movieCategoryLabelViewState: MovieCategoryLabelViewState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (movieCategoryLabelViewState.isSelected) {
@@ -35,23 +37,33 @@ fun MovieCategoryLabel(
             modifier = modifier
                 .padding(5.dp)
                 .width(intrinsicSize = IntrinsicSize.Max)
+                .clickable(onClick = onClick)
         ) {
             Text(
                 text = selectTextSource(movieCategoryLabelViewState = movieCategoryLabelViewState),
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                modifier = modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             )
-            Spacer(modifier = modifier.size(6.dp))
-            Divider(color = Color.Black, thickness = 4.dp, modifier = modifier.fillMaxWidth())
+            Spacer(modifier = Modifier
+                .size(6.dp)
+            )
+            Divider(color = Color.Black,
+                thickness = 4.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
         }
     } else {
         Text(
             text = selectTextSource(movieCategoryLabelViewState = movieCategoryLabelViewState),
             color = Color.Gray,
             fontSize = 16.sp,
-            modifier = modifier.padding(5.dp)
+            modifier = modifier
+                .padding(5.dp)
+                .clickable(onClick = onClick)
         )
     }
 }
@@ -64,6 +76,10 @@ fun selectTextSource(movieCategoryLabelViewState: MovieCategoryLabelViewState): 
     }
 }
 
+fun onMovieCategoryLabelClick(){
+
+}
+
 @Preview
 @Composable
 fun MovieCategoryLabelPreview(){
@@ -72,7 +88,9 @@ fun MovieCategoryLabelPreview(){
     val categoryViewState1 = MovieCategoryLabelViewState(0, true, stringRes)
     val categoryViewState2 = MovieCategoryLabelViewState(1, false, inputText)
     Row{
-        MovieCategoryLabel(movieCategoryLabelViewState = categoryViewState1)
-        MovieCategoryLabel(movieCategoryLabelViewState = categoryViewState2)
+        MovieCategoryLabel(movieCategoryLabelViewState = categoryViewState1,
+            { onMovieCategoryLabelClick() })
+        MovieCategoryLabel(movieCategoryLabelViewState = categoryViewState2,
+            { onMovieCategoryLabelClick() })
     }
 }
