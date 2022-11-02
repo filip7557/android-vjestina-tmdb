@@ -38,34 +38,32 @@ fun ActorCard(
         modifier = modifier
     ) {
         Column {
-            Box  {
-                AsyncImage(
-                    model = actorCardViewState.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    contentScale = ContentScale.FillWidth,
+            AsyncImage(
+                model = actorCardViewState.imageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth(1f),
+                contentScale = ContentScale.FillWidth,
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = actorCardViewState.name,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = actorCardViewState.character,
+                    fontSize = 15.sp,
+                    color = Color.Gray,
                 )
             }
-            Box (
-                modifier = Modifier.fillMaxWidth(1f),
-                contentAlignment = Alignment.Center
-                    ) {
-                Column {
-                    Text(
-                        text = actorCardViewState.name,
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = actorCardViewState.character,
-                        fontSize = 15.sp,
-                        color = Color.Gray,
-                    )
-                }
-            }
-                Spacer(modifier = Modifier
-                    .padding(8.dp))
+            Spacer(
+                modifier = Modifier
+                    .size(5.dp)
+            )
         }
     }
 }
