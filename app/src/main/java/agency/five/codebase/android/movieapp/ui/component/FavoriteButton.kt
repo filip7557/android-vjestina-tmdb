@@ -19,10 +19,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FavoriteButton(
     isSelected: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selected by remember { mutableStateOf(isSelected) }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -34,12 +33,10 @@ fun FavoriteButton(
                 .size(50.dp)
                 .clip(CircleShape)
                 .background(Blue.copy(alpha = 0.7f))
-                .clickable {
-                    selected = selected.not()
-                },
+                .clickable(onClick = onClick)
         ) {
             Icon(
-                painter = painterResource(id = if (selected) R.drawable.heart_icon_selected else R.drawable.heart_icon_notselected),
+                painter = painterResource(id = if (isSelected) R.drawable.heart_icon_selected else R.drawable.heart_icon_notselected),
                 contentDescription = null,
                 modifier = Modifier
                     .size(30.dp),
@@ -52,5 +49,6 @@ fun FavoriteButton(
 @Preview
 @Composable
 fun FavoriteButtonPreview() {
-        FavoriteButton(isSelected = false)
+    var selected by remember { mutableStateOf(false) }
+    FavoriteButton(isSelected = selected, onClick = {selected = selected.not()})
 }
