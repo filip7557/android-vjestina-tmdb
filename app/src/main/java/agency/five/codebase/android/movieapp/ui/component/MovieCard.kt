@@ -4,6 +4,7 @@ import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.mock.MoviesMock.getMoviesList
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material.Card
@@ -39,7 +40,9 @@ fun MovieCard(
             contentScale = ContentScale.FillWidth
         )
         Box(
-            contentAlignment = Alignment.TopStart
+            contentAlignment = Alignment.TopStart,
+            modifier = Modifier
+                .padding(8.dp)
         ) {
             FavoriteButton(
                 isSelected = movieCardViewState.isFavorite,
@@ -56,7 +59,8 @@ fun MovieCardPreview() {
     var selected by remember { mutableStateOf(false) }
     MovieCard(movieCardViewState = MovieCardViewState(imageUrl = movie.imageUrl,
         movieId = movie.id, isFavorite = movie.isFavorite),
-        modifier = Modifier.size(200.dp, 295.dp),
+        modifier = Modifier
+            .size(200.dp, 295.dp),
         onClick = { /*TODO later with data*/ }
     )
 }
