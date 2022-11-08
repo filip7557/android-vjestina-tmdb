@@ -25,7 +25,6 @@ fun FavoriteButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(width = 65.dp, height = 81.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
