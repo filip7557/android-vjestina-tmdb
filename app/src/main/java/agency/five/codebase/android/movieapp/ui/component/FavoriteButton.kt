@@ -5,6 +5,8 @@ import agency.five.codebase.android.movieapp.ui.theme.Blue
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -29,7 +31,8 @@ fun FavoriteButton(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(50.dp)
+                .fillMaxSize(1f)
+                .padding(8.dp)
                 .clip(CircleShape)
                 .background(Blue.copy(alpha = 0.7f))
                 .clickable(onClick = onClick)
@@ -38,7 +41,8 @@ fun FavoriteButton(
                 painter = painterResource(id = if (isSelected) R.drawable.heart_icon_selected else R.drawable.heart_icon_notselected),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp),
+                    .fillMaxSize(1f)
+                    .padding(8.dp),
             )
         }
     }
@@ -49,5 +53,10 @@ fun FavoriteButton(
 @Composable
 fun FavoriteButtonPreview() {
     var selected by remember { mutableStateOf(false) }
-    FavoriteButton(isSelected = selected, onClick = {selected = selected.not()})
+    FavoriteButton(
+        isSelected = selected,
+        onClick = {selected = selected.not()},
+        modifier = Modifier
+            .size(70.dp)
+    )
 }
