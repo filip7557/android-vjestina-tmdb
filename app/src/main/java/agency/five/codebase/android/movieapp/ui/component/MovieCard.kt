@@ -1,11 +1,7 @@
 package agency.five.codebase.android.movieapp.ui.component
 
-import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.mock.MoviesMock.getMoviesList
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.*
@@ -42,11 +38,13 @@ fun MovieCard(
         Box(
             contentAlignment = Alignment.TopStart,
             modifier = Modifier
-                .padding(8.dp)
+                .padding(8.dp),
         ) {
             FavoriteButton(
                 isSelected = movieCardViewState.isFavorite,
-                onClick = onClick
+                onClick = onClick,
+                modifier = Modifier
+                    .size(50.dp)
             )
         }
     }
@@ -56,7 +54,6 @@ fun MovieCard(
 @Composable
 fun MovieCardPreview() {
     val movie = getMoviesList()[1]
-    var selected by remember { mutableStateOf(false) }
     MovieCard(movieCardViewState = MovieCardViewState(imageUrl = movie.imageUrl,
         movieId = movie.id, isFavorite = movie.isFavorite),
         modifier = Modifier
