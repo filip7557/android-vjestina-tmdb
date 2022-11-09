@@ -26,7 +26,7 @@ fun MovieCard(
 ) {
     Card(
         modifier = modifier,
-        shape = AbsoluteRoundedCornerShape(18.dp),
+        shape = AbsoluteRoundedCornerShape(10.dp),
     ) {
         AsyncImage(
             model = movieCardViewState.imageUrl,
@@ -44,7 +44,7 @@ fun MovieCard(
                 isSelected = movieCardViewState.isFavorite,
                 onClick = onClick,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(30.dp)
             )
         }
     }
