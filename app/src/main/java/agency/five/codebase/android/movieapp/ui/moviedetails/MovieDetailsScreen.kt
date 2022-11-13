@@ -10,6 +10,7 @@ import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetails
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,121 +57,143 @@ fun MovieDetailsScreen(
 ) {
     Column {
         MovieDetailsTopAppBar()
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .background(color = MaterialTheme.colors.background)
+        ) {
             item {
-                Box(
-                    contentAlignment = Alignment.BottomStart
-                ) {
-                    AsyncImage(
-                        model = movieDetailsViewState.imageUrl,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(350.dp)
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            CircularProgressBar(
-                                score = movieDetailsViewState.voteAverage,
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp)
-                            )
-                            Text(
-                                text = "User score",
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        Text(
-                            text = movieDetailsViewState.title,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.onPrimary,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                        )
-                        FavoriteButton(
-                            isSelected = movieDetailsViewState.isFavorite,
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .size(50.dp)
-                                .padding(8.dp)
-                        )
-                    }
-                }
+                MovieImage()
             }
 
             item {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 15.dp)
-                ) {
-                    Text(
-                        text = "Overview",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                    )
-                    Text(
-                        text = movieDetailsViewState.overview,
-                        fontSize = 15.sp,
-                    )
-                }
+                MovieOverview()
             }
 
             item {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(10.dp),
-                userScrollEnabled = false,
-                modifier = Modifier
-                    .height(150.dp)
-            ) {
-                items(
-                    movieDetailsViewState.crew,
-                ) { crewman ->
-                    CrewItem(
-                        crewItemViewState = crewman.crewItemViewState,
-                        modifier = Modifier
-                            .padding(vertical = 10.dp, horizontal = 8.dp)
-                    )
-                }
-            }
-        }
-
-            item {
-                Text(
-                    text = "Top Billed Cast",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier
-                        .padding(horizontal = 15.dp, vertical = 8.dp)
-                )
+                MovieCrewman()
             }
 
             item {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(15.dp),
-                    modifier = Modifier
-                        .padding(horizontal = 15.dp, vertical = 8.dp)
-                ) {
-                    items(movieDetailsViewState.cast.size) { actor ->
-                        ActorCard(
-                            actorCardViewState = movieDetailsViewState.cast[actor].actorCardViewState,
-                            modifier = Modifier
-                                .size(width = 140.dp, height = 220.dp)
-                        )
-                    }
-                }
+                MovieCast()
             }
         }
     }
+}
+
+@Composable
+fun MovieCast() {
+    Column {
+        Text(
+            text = "Top Billed Cast",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 8.dp)
+        )
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 8.dp)
+        ) {
+            items(movieDetailsViewState.cast.size) { actor ->
+                ActorCard(
+                    actorCardViewState = movieDetailsViewState.cast[actor].actorCardViewState,
+                    modifier = Modifier
+                        .size(width = 140.dp, height = 220.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MovieCrewman() {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(10.dp),
+        userScrollEnabled = false,
+        modifier = Modifier
+            .height(150.dp)
+    ) {
+        items(
+            movieDetailsViewState.crew,
+        ) { crewman ->
+            CrewItem(
+                crewItemViewState = crewman.crewItemViewState,
+                modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun MovieOverview() {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 15.dp)
+    ) {
+        Text(
+            text = "Overview",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+        )
+        Text(
+            text = movieDetailsViewState.overview,
+            fontSize = 15.sp,
+        )
+    }
+}
+
+@Composable
+fun MovieImage() {
+        Box(
+            contentAlignment = Alignment.BottomStart
+        ) {
+            AsyncImage(
+                model = movieDetailsViewState.imageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .height(350.dp)
+                    .fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressBar(
+                        score = movieDetailsViewState.voteAverage,
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = "User score",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                    )
+                }
+                Text(
+                    text = movieDetailsViewState.title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                )
+                FavoriteButton(
+                    isSelected = movieDetailsViewState.isFavorite,
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .size(50.dp)
+                        .padding(8.dp)
+                )
+            }
+        }
 }
 
 @Composable
