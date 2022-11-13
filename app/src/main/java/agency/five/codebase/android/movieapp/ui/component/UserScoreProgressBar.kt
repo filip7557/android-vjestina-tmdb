@@ -8,6 +8,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +26,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CircularProgressBar(
     modifier: Modifier = Modifier,
-    score: Double,
+    score: Float,
 ){
     val animationPlayed = remember { mutableStateOf(false) }
     val currentPercentage = animateFloatAsState(
@@ -42,11 +43,11 @@ fun CircularProgressBar(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(30.dp * 2f)
+            .size(20.dp * 2f)
     ){
         Canvas(modifier = Modifier
             .padding(5.dp)
-            .size(30.dp * 2f)){
+            .size(20.dp * 2f)){
             drawArc(
                 color = GreenProgressBarBackground,
                 startAngle = -90f,
@@ -65,8 +66,8 @@ fun CircularProgressBar(
 
         Text(
             text = (score * 10).toString(),
-            fontSize = 15.sp,
-            color = Color.Black
+            fontSize = 13.sp,
+            color = MaterialTheme.colors.onPrimary
         )
     }
 }
@@ -74,5 +75,5 @@ fun CircularProgressBar(
 @Preview(showBackground = true)
 @Composable
 fun CircularProgressBarPreview(){
-    CircularProgressBar(score = 0.85)
+    CircularProgressBar(score = 0.85f)
 }
