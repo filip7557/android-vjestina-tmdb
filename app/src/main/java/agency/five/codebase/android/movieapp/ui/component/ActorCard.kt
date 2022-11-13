@@ -35,7 +35,7 @@ fun ActorCard(
 {
     Card(
         elevation = 50.dp,
-        shape = AbsoluteRoundedCornerShape(10.dp),
+        shape = AbsoluteRoundedCornerShape(8.dp),
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.onPrimary
     ) {
@@ -44,24 +44,26 @@ fun ActorCard(
                 model = actorCardViewState.imageUrl,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth(1f),
-                contentScale = ContentScale.FillWidth,
+                    .fillMaxHeight(0.7f),
+                contentScale = ContentScale.Crop,
             )
             Column(
                 modifier = Modifier.fillMaxWidth(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = actorCardViewState.name,
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(5.dp)
                 )
                 Text(
                     text = actorCardViewState.character,
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = Color.Gray,
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 5.dp)
                 )
             }
             Spacer(
