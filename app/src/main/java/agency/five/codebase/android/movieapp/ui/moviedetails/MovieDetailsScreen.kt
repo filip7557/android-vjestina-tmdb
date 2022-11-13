@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -87,7 +86,8 @@ fun MovieDetailsScreen(
                         }
                         Text(
                             text = movieDetailsViewState.title,
-                            fontSize = 17.sp,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.onPrimary,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
@@ -114,7 +114,7 @@ fun MovieDetailsScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primary,
                         modifier = Modifier
-                            .padding(vertical = 5.dp)
+                            .padding(vertical = 8.dp)
                     )
                     Text(
                         text = movieDetailsViewState.overview,
@@ -123,19 +123,25 @@ fun MovieDetailsScreen(
                 }
             }
 
-            /*item {
+            item {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(8.dp),
+                contentPadding = PaddingValues(10.dp),
                 userScrollEnabled = false,
+                modifier = Modifier
+                    .height(150.dp)
             ) {
                 items(
                     movieDetailsViewState.crew,
                 ) { crewman ->
-                    CrewItem(crewItemViewState = crewman.crewItemViewState)
+                    CrewItem(
+                        crewItemViewState = crewman.crewItemViewState,
+                        modifier = Modifier
+                            .padding(vertical = 10.dp, horizontal = 8.dp)
+                    )
                 }
             }
-        }*/
+        }
 
             item {
                 Text(
@@ -152,13 +158,13 @@ fun MovieDetailsScreen(
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(15.dp),
                     modifier = Modifier
-                        .padding(horizontal = 15.dp)
+                        .padding(horizontal = 15.dp, vertical = 8.dp)
                 ) {
                     items(movieDetailsViewState.cast.size) { actor ->
                         ActorCard(
                             actorCardViewState = movieDetailsViewState.cast[actor].actorCardViewState,
                             modifier = Modifier
-                                .size(width = 120.dp, height = 240.dp)
+                                .size(width = 140.dp, height = 220.dp)
                         )
                     }
                 }
