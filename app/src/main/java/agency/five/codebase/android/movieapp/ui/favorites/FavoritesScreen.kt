@@ -51,7 +51,7 @@ fun FavoritesScreen(
             .fillMaxSize(1f)
     ) {
         FavoritesTopAppBar()
-        FavoritesLazyVerticalGrid()
+        FavoritesLazyVerticalGrid(favoritesViewState)
     }
     FavoritesBottomNavigation()
 }
@@ -62,7 +62,7 @@ fun FavoritesTopAppBar() {
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.primary,
         modifier = Modifier
-            .fillMaxHeight(0.1f)
+            .fillMaxHeight(0.07f)
     ) {
         Box(
             modifier = Modifier
@@ -78,7 +78,7 @@ fun FavoritesTopAppBar() {
 }
 
 @Composable
-fun FavoritesLazyVerticalGrid() {
+fun FavoritesLazyVerticalGrid(favoritesViewState: FavoritesViewState) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -93,7 +93,10 @@ fun FavoritesLazyVerticalGrid() {
                     .padding(10.dp)
             )
         }
-        items(favoritesViewState.movies) { movie ->
+        items(
+            favoritesViewState.movies,
+            key = { movie -> movie.movieCardViewState.movieId }
+        ) { movie ->
             MovieCard(
                 movieCardViewState = movie.movieCardViewState,
                 modifier = Modifier
@@ -112,7 +115,7 @@ fun FavoritesBottomNavigation() {
     ) {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.onBackground,
+            contentColor = MaterialTheme.colors.onSurface,
         ) {
             BottomNavigationItem(
                 selected = false,
@@ -156,7 +159,7 @@ fun LazyGridScope.header(
     item(span = { GridItemSpan(this.maxLineSpan) }, content = content)
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview
 @Composable
 fun FavoritesScreenPreview() {
     val favoritesMapper = FavoritesMapperImpl()
