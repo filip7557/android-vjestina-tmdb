@@ -22,7 +22,7 @@ private val LightColorPalette = lightColors(
     secondary = Color.White,
     background = Gray100,
     onPrimary = Color.White,
-    onBackground = Color.Black,
+    onBackground = Color.White,
     surface = Gray300,
     onSurface = Color.Black
 )
