@@ -26,12 +26,12 @@ fun CrewItem(
     ){
         Text(
             text = crewItemViewState.name,
-            fontSize = 17.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
         )
         Text(
             text = crewItemViewState.job,
-            fontSize = 17.sp,
+            fontSize = 14.sp,
         )
     }
 }
