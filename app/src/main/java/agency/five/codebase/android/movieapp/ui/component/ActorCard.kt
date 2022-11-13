@@ -34,7 +34,7 @@ fun ActorCard(
 )
 {
     Card(
-        elevation = 50.dp,
+        elevation = 8.dp,
         shape = AbsoluteRoundedCornerShape(8.dp),
         modifier = modifier,
         backgroundColor = MaterialTheme.colors.onPrimary
