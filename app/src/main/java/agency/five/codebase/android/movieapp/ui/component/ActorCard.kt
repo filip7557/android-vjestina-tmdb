@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,8 +35,9 @@ fun ActorCard(
 {
     Card(
         elevation = 50.dp,
-        shape = AbsoluteRoundedCornerShape(18.dp),
-        modifier = modifier
+        shape = AbsoluteRoundedCornerShape(10.dp),
+        modifier = modifier,
+        backgroundColor = MaterialTheme.colors.onPrimary
     ) {
         Column {
             AsyncImage(
@@ -51,13 +53,15 @@ fun ActorCard(
             ) {
                 Text(
                     text = actorCardViewState.name,
-                    fontSize = 17.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = actorCardViewState.character,
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     color = Color.Gray,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
                 )
             }
             Spacer(
