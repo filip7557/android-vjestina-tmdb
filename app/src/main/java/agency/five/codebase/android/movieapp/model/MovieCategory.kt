@@ -8,5 +8,10 @@ enum class MovieCategory {
     NOWPLAYING_MOVIES,
     NOWPLAYING_TV,
     UPCOMING_TODAY,
-    UPCOMING_THISWEEK
+    UPCOMING_THISWEEK;
+
+    companion object {
+        private val VALUES = values()
+        fun getByOrdinal(ordinal: Int) = VALUES.firstOrNull { it.ordinal == ordinal }
+    }
 }
