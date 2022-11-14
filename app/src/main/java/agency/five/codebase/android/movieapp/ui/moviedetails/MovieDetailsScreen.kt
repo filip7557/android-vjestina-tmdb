@@ -44,10 +44,10 @@ val movieDetailsViewState = MovieDetailsMapper.toMovieDetailsViewState(MoviesMoc
 fun MovieDetailsRoute(
     //actions
 ) {
-    val movieDetailsViewState by remember { mutableStateOf(movieDetailsViewState) }
+    val detailsViewState by remember { mutableStateOf(movieDetailsViewState) }
 
     MovieDetailsScreen(
-        movieDetailsViewState,
+        detailsViewState,
     )
 }
 
@@ -60,25 +60,27 @@ fun MovieDetailsScreen(
             .background(color = MaterialTheme.colors.background)
     ) {
         item {
-            MovieImage()
+            MovieImage(movieDetailsViewState)
         }
 
         item {
-            MovieOverview()
+            MovieOverview(movieDetailsViewState)
         }
 
         item {
-            MovieCrewman()
+            MovieCrewman(movieDetailsViewState)
         }
 
         item {
-            MovieCast()
+            MovieCast(movieDetailsViewState)
         }
     }
 }
 
 @Composable
-fun MovieCast() {
+fun MovieCast(
+    movieDetailsViewState: MovieDetailsViewState,
+) {
     Column {
         Text(
             text = "Top Billed Cast",
@@ -105,7 +107,9 @@ fun MovieCast() {
 }
 
 @Composable
-fun MovieCrewman() {
+fun MovieCrewman(
+    movieDetailsViewState: MovieDetailsViewState
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(10.dp),
@@ -126,7 +130,9 @@ fun MovieCrewman() {
 }
 
 @Composable
-fun MovieOverview() {
+fun MovieOverview(
+    movieDetailsViewState: MovieDetailsViewState
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 15.dp)
@@ -147,7 +153,9 @@ fun MovieOverview() {
 }
 
 @Composable
-fun MovieImage() {
+fun MovieImage(
+    movieDetailsViewState: MovieDetailsViewState
+) {
         Box(
             contentAlignment = Alignment.BottomStart
         ) {
@@ -192,41 +200,6 @@ fun MovieImage() {
             }
         }
 }
-
-@Composable
-fun MovieDetailsTopAppBar() {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier
-            .fillMaxHeight(0.07f)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.tmdb_logo),
-                contentDescription = null,
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(1f),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back_icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable { /*TODO*/ }
-                )
-            }
-        }
-    }
-}
-
 
 @Preview
 @Composable
