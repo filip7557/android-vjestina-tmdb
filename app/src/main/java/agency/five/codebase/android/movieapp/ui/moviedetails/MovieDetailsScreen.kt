@@ -55,27 +55,24 @@ fun MovieDetailsRoute(
 fun MovieDetailsScreen(
     movieDetailsViewState: MovieDetailsViewState,
 ) {
-    Column {
-        MovieDetailsTopAppBar()
-        LazyColumn(
-            modifier = Modifier
-                .background(color = MaterialTheme.colors.background)
-        ) {
-            item {
-                MovieImage()
-            }
+    LazyColumn(
+        modifier = Modifier
+            .background(color = MaterialTheme.colors.background)
+    ) {
+        item {
+            MovieImage()
+        }
 
-            item {
-                MovieOverview()
-            }
+        item {
+            MovieOverview()
+        }
 
-            item {
-                MovieCrewman()
-            }
+        item {
+            MovieCrewman()
+        }
 
-            item {
-                MovieCast()
-            }
+        item {
+            MovieCast()
         }
     }
 }
