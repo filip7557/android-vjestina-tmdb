@@ -1,23 +1,23 @@
 package agency.five.codebase.android.movieapp.ui.favorites
 
-import agency.five.codebase.android.movieapp.R
 import agency.five.codebase.android.movieapp.mock.MoviesMock
+import agency.five.codebase.android.movieapp.navigation.MovieAppDestination
+import agency.five.codebase.android.movieapp.navigation.MovieDetailsDestination
+import agency.five.codebase.android.movieapp.navigation.NavigationItem
 import agency.five.codebase.android.movieapp.ui.component.MovieCard
 import agency.five.codebase.android.movieapp.ui.favorites.mapper.FavoritesMapper
 import agency.five.codebase.android.movieapp.ui.favorites.mapper.FavoritesMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,13 +29,14 @@ val favoritesViewState = FavoritesMapper.toFavoritesViewState(MoviesMock.getMovi
 
 @Composable
 fun FavoritesRoute(
-    //actions
+    onNavigateToMovieDetails: (String) -> Unit
 ) {
     val favoritesViewState by remember { mutableStateOf(favoritesViewState) }
     // ...
 
     FavoritesScreen(
         favoritesViewState,
+        onNavigateToMovieDetails
         // other states and actions
     )
 }
@@ -43,34 +44,17 @@ fun FavoritesRoute(
 @Composable
 fun FavoritesScreen(
     favoritesViewState: FavoritesViewState,
+    onNavigateToMovieDetails: (String) -> Unit,
     // other states and actions
 ) {
-        FavoritesLazyVerticalGrid(favoritesViewState)
+        FavoritesLazyVerticalGrid(favoritesViewState, onNavigateToMovieDetails)
 }
 
 @Composable
-fun FavoritesTopAppBar() {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = MaterialTheme.colors.primary,
-        modifier = Modifier
-            .fillMaxHeight(0.07f)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.tmdb_logo),
-                contentDescription = null,
-            )
-        }
-    }
-}
-
-@Composable
-fun FavoritesLazyVerticalGrid(favoritesViewState: FavoritesViewState) {
+fun FavoritesLazyVerticalGrid(
+    favoritesViewState: FavoritesViewState,
+    onNavigateToMovieDetails: (String) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -93,53 +77,10 @@ fun FavoritesLazyVerticalGrid(favoritesViewState: FavoritesViewState) {
                 movieCardViewState = movie.movieCardViewState,
                 modifier = Modifier
                     .padding(vertical = 15.dp, horizontal = 4.dp),
-                onClick = { /*TODO*/ })
-        }
-    }
-}
-
-@Composable
-fun FavoritesBottomNavigation() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(1f),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        BottomNavigation(
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.onSurface,
-        ) {
-            BottomNavigationItem(
-                selected = false,
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.home_notselected),
-                        contentDescription = null
-                    )
+                onClick = {
+                    onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(movie.movieCardViewState.movieId))
                 },
-                label = {
-                    Text(
-                        text = "Home",
-                        style = typography.button
-                    )
-                },
-                onClick = { /*TODO*/ },
-            )
-            BottomNavigationItem(
-                selected = true,
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.heart_icon_selected),
-                        contentDescription = null
-                    )
-                },
-                label = {
-                    Text(
-                        text = "Favorites",
-                        style = typography.button
-                    )
-                },
-                onClick = { /*TODO*/ },
+                onIconClick = { }
             )
         }
     }
@@ -158,7 +99,7 @@ fun FavoritesScreenPreview() {
     MovieAppTheme {
         FavoritesScreen(
             favoritesViewState = favoritesMapper.toFavoritesViewState(MoviesMock.getMoviesList()),
-            // states and empty actions
+            onNavigateToMovieDetails = {}
         )
     }
 }
