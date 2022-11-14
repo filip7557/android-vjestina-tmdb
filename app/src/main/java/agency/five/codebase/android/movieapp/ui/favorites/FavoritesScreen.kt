@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,11 +31,11 @@ val favoritesViewState = FavoritesMapper.toFavoritesViewState(MoviesMock.getMovi
 fun FavoritesRoute(
     //actions
 ) {
-    val z by remember { mutableStateOf(favoritesViewState) }
+    val favoritesViewState by remember { mutableStateOf(favoritesViewState) }
     // ...
 
     FavoritesScreen(
-        z,
+        favoritesViewState,
         // other states and actions
     )
 }
@@ -46,14 +45,7 @@ fun FavoritesScreen(
     favoritesViewState: FavoritesViewState,
     // other states and actions
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(1f)
-    ) {
-        FavoritesTopAppBar()
         FavoritesLazyVerticalGrid(favoritesViewState)
-    }
-    FavoritesBottomNavigation()
 }
 
 @Composable
