@@ -62,7 +62,7 @@ val upcomingCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
 
 @Composable
 fun HomeScreenRoute(
-    //actions
+    onNavigateToMovieDetails: () -> Unit
 ) {
     val popularViewState by remember { mutableStateOf(popularCategoryViewState) }
     val nowPlayingViewState by remember { mutableStateOf(nowPlayingCategoryViewState) }
@@ -124,7 +124,7 @@ fun UpcomingMovies(
                     upcomingViewState.movieCategories[category].isSelected,
                     upcomingViewState.movieCategories[category].categoryText
                 ),
-                onClick = { /*TODO*/ }
+                onClick = { /*TODO*/ },
             )
         }
     }
@@ -140,7 +140,8 @@ fun UpcomingMovies(
                 upcomingViewState.movies[movie].movieId,
                 upcomingViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ }
+                onClick = { /*TODO*/ },
+                onIconClick = {}
             )
         }
     }
@@ -188,7 +189,8 @@ fun NowPlayingMovies(
                 nowPlayingViewState.movies[movie].movieId,
                 nowPlayingViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ }
+                onClick = { /*TODO*/ },
+                onIconClick = {}
             )
         }
     }
@@ -236,7 +238,8 @@ fun PopularMovies(
                 popularViewState.movies[movie].movieId,
                 popularViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ }
+                onClick = { /*TODO*/ },
+                onIconClick = {}
             )
         }
     }
@@ -246,7 +249,11 @@ fun PopularMovies(
 @Composable
 fun HomeScreenPreview() {
     MovieAppTheme {
-        HomeScreenRoute()
+        HomeScreen(
+            popularViewState = popularCategoryViewState,
+            nowPlayingViewState = nowPlayingCategoryViewState,
+            upcomingViewState = upcomingCategoryViewState
+        )
     }
 }
 
