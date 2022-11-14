@@ -43,7 +43,7 @@ fun MovieCategoryLabel(
                 text = selectTextSource(movieCategoryLabelViewState = movieCategoryLabelViewState),
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -60,7 +60,7 @@ fun MovieCategoryLabel(
         Text(
             text = selectTextSource(movieCategoryLabelViewState = movieCategoryLabelViewState),
             color = Color.Gray,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             modifier = modifier
                 .padding(5.dp)
                 .clickable(onClick = onClick)
