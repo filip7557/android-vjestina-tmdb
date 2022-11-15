@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,16 +25,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val showBottomBar by remember { mutableStateOf( //need to fix this bs
-        navController.currentDestination?.route == MovieDetailsDestination.route
-    )
-    }
+    var showBottomBar by remember { mutableStateOf(navController.currentDestination == null) }
 
     val showBackIcon = !showBottomBar
 
@@ -45,7 +43,10 @@ fun MainScreen() {
         topBar = {
             TopBar(
                 navigationIcon = {
-                    if (showBackIcon) BackIcon(onBackClick = navController::popBackStack)
+                    if (showBackIcon) BackIcon(onBackClick = {
+                        showBottomBar = showBottomBar.not()
+                        navController.popBackStack()
+                    })
                 }
             )
         },
@@ -79,14 +80,17 @@ fun MainScreen() {
             ) {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeScreenRoute(
-                        onNavigateToMovieDetails = { }
+                        onNavigateToMovieDetails = {
+                            showBottomBar = showBottomBar.not()
+                            navController.navigate(it)
+                        }
                     )
                 }
 
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
                         onNavigateToMovieDetails = {
-                            !showBottomBar
+                            showBottomBar = showBottomBar.not()
                             navController.navigate(it)
                         }
                     )
@@ -122,6 +126,9 @@ private fun TopBar(
                 painter = painterResource(id = R.drawable.tmdb_logo),
                 contentDescription = null,
             )
+            if (navigationIcon != null) {
+                navigationIcon()
+            }
         }
     }
 }
