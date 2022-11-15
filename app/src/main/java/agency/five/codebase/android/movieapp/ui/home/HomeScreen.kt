@@ -2,6 +2,7 @@ package agency.five.codebase.android.movieapp.ui.home
 
 import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.model.MovieCategory
+import agency.five.codebase.android.movieapp.navigation.MovieDetailsDestination
 import agency.five.codebase.android.movieapp.ui.component.MovieCard
 import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
 import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabel
@@ -15,10 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,16 +60,38 @@ val upcomingCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
 
 @Composable
 fun HomeScreenRoute(
-    onNavigateToMovieDetails: () -> Unit
+    onNavigateToMovieDetails: (String) -> Unit
 ) {
-    val popularViewState by remember { mutableStateOf(popularCategoryViewState) }
-    val nowPlayingViewState by remember { mutableStateOf(nowPlayingCategoryViewState) }
-    val upcomingViewState by remember { mutableStateOf(upcomingCategoryViewState) }
+    var popularViewState by remember { mutableStateOf(popularCategoryViewState) }
+    var nowPlayingViewState by remember { mutableStateOf(nowPlayingCategoryViewState) }
+    var upcomingViewState by remember { mutableStateOf(upcomingCategoryViewState) }
 
     HomeScreen(
-        popularViewState,
-        nowPlayingViewState,
-        upcomingViewState
+        popularViewState = popularViewState,
+        nowPlayingViewState = nowPlayingViewState,
+        upcomingViewState = upcomingViewState,
+        onPopularLabelClick = {
+            popularViewState = homeScreenMapper.toHomeMovieCategoryViewState(
+                popularCategoryLabels,
+                MovieCategory.getByOrdinal(it)!!,
+                MoviesMock.getMoviesList()
+            )
+        },
+        onNowPlayingLabelClick = {
+            nowPlayingViewState = homeScreenMapper.toHomeMovieCategoryViewState(
+                nowPlayingCategoryLabels,
+                MovieCategory.getByOrdinal(it)!!,
+                MoviesMock.getMoviesList()
+            )
+        },
+        onUpcomingLabelClick = {
+            upcomingViewState = homeScreenMapper.toHomeMovieCategoryViewState(
+                upcomingCategoryLabels,
+                MovieCategory.getByOrdinal(it)!!,
+                MoviesMock.getMoviesList()
+            )
+        },
+        onNavigateToMovieDetails = onNavigateToMovieDetails
     )
 }
 
@@ -79,28 +99,34 @@ fun HomeScreenRoute(
 fun HomeScreen(
     popularViewState: HomeMovieCategoryViewState,
     nowPlayingViewState: HomeMovieCategoryViewState,
-    upcomingViewState: HomeMovieCategoryViewState
+    upcomingViewState: HomeMovieCategoryViewState,
+    onPopularLabelClick: (Int) -> Unit,
+    onNowPlayingLabelClick: (Int) -> Unit,
+    onUpcomingLabelClick: (Int) -> Unit,
+    onNavigateToMovieDetails: (String) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ) {
         item {
-            PopularMovies(popularViewState)
+            PopularMovies(popularViewState, onPopularLabelClick, onNavigateToMovieDetails)
         }
 
         item {
-            NowPlayingMovies(nowPlayingViewState)
+            NowPlayingMovies(nowPlayingViewState, onNowPlayingLabelClick, onNavigateToMovieDetails)
         }
 
         item {
-            UpcomingMovies(upcomingViewState)
+            UpcomingMovies(upcomingViewState, onUpcomingLabelClick, onNavigateToMovieDetails)
         }
     }
 }
 
 @Composable
 fun UpcomingMovies(
-    upcomingViewState: HomeMovieCategoryViewState
+    upcomingViewState: HomeMovieCategoryViewState,
+    onLabelClick: (Int) -> Unit,
+    onNavigateToMovieDetails: (String) -> Unit
 ) {
     Text(
         text = "Upcoming",
@@ -124,7 +150,7 @@ fun UpcomingMovies(
                     upcomingViewState.movieCategories[category].isSelected,
                     upcomingViewState.movieCategories[category].categoryText
                 ),
-                onClick = { /*TODO*/ },
+                onClick = { onLabelClick(upcomingViewState.movieCategories[category].itemId) },
             )
         }
     }
@@ -140,7 +166,7 @@ fun UpcomingMovies(
                 upcomingViewState.movies[movie].movieId,
                 upcomingViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(upcomingViewState.movies[movie].movieId)) },
                 onIconClick = {}
             )
         }
@@ -149,7 +175,9 @@ fun UpcomingMovies(
 
 @Composable
 fun NowPlayingMovies(
-    nowPlayingViewState: HomeMovieCategoryViewState
+    nowPlayingViewState: HomeMovieCategoryViewState,
+    onLabelClick: (Int) -> Unit,
+    onNavigateToMovieDetails: (String) -> Unit
 ) {
     Text(
         text = "Now playing",
@@ -173,7 +201,7 @@ fun NowPlayingMovies(
                     nowPlayingViewState.movieCategories[category].isSelected,
                     nowPlayingViewState.movieCategories[category].categoryText
                 ),
-                onClick = { /*TODO*/ }
+                onClick = { onLabelClick(nowPlayingViewState.movieCategories[category].itemId) }
             )
         }
     }
@@ -189,7 +217,7 @@ fun NowPlayingMovies(
                 nowPlayingViewState.movies[movie].movieId,
                 nowPlayingViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(nowPlayingViewState.movies[movie].movieId)) },
                 onIconClick = {}
             )
         }
@@ -198,7 +226,9 @@ fun NowPlayingMovies(
 
 @Composable
 fun PopularMovies(
-    popularViewState: HomeMovieCategoryViewState
+    popularViewState: HomeMovieCategoryViewState,
+    onLabelClick: (Int) -> Unit,
+    onNavigateToMovieDetails: (String) -> Unit
 ) {
     Text(
         text = "What's popular",
@@ -222,7 +252,7 @@ fun PopularMovies(
                     popularViewState.movieCategories[category].isSelected,
                     popularViewState.movieCategories[category].categoryText
                 ),
-                onClick = { /*TODO*/ }
+                onClick = { onLabelClick(popularViewState.movieCategories[category].itemId) }
             )
         }
     }
@@ -238,7 +268,7 @@ fun PopularMovies(
                 popularViewState.movies[movie].movieId,
                 popularViewState.movies[movie].isFavorite
             ),
-                onClick = { /*TODO*/ },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(popularViewState.movies[movie].movieId)) },
                 onIconClick = {}
             )
         }
@@ -249,11 +279,9 @@ fun PopularMovies(
 @Composable
 fun HomeScreenPreview() {
     MovieAppTheme {
-        HomeScreen(
-            popularViewState = popularCategoryViewState,
-            nowPlayingViewState = nowPlayingCategoryViewState,
-            upcomingViewState = upcomingCategoryViewState
-        )
+        HomeScreenRoute {
+
+        }
     }
 }
 
