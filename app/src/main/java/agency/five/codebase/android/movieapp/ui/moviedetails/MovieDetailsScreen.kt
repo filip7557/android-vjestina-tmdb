@@ -147,6 +147,7 @@ fun MovieOverview(
         )
         Text(
             text = movieDetailsViewState.overview,
+            color = MaterialTheme.colors.onSurface,
             fontSize = 15.sp,
         )
     }
