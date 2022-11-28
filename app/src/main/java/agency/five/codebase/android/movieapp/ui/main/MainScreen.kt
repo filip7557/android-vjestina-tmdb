@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,17 +28,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    var showBottomBar by remember { mutableStateOf(navController.currentDestination == null) }
+    val showBottomBar by remember { derivedStateOf {navBackStackEntry?.destination?.route == HOME_ROUTE || navBackStackEntry?.destination?.route == FAVORITES_ROUTE} }
 
     val showBackIcon = !showBottomBar
 
@@ -44,7 +43,6 @@ fun MainScreen() {
             TopBar(
                 navigationIcon = {
                     if (showBackIcon) BackIcon(onBackClick = {
-                        showBottomBar = showBottomBar.not()
                         navController.popBackStack()
                     })
                 }
@@ -81,7 +79,6 @@ fun MainScreen() {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeScreenRoute(
                         onNavigateToMovieDetails = {
-                            showBottomBar = showBottomBar.not()
                             navController.navigate(it)
                         }
                     )
@@ -90,7 +87,6 @@ fun MainScreen() {
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
                         onNavigateToMovieDetails = {
-                            showBottomBar = showBottomBar.not()
                             navController.navigate(it)
                         }
                     )
