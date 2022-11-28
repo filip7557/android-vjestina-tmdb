@@ -9,9 +9,8 @@ import agency.five.codebase.android.movieapp.ui.component.FavoriteButton
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -55,25 +54,18 @@ fun MovieDetailsRoute(
 fun MovieDetailsScreen(
     movieDetailsViewState: MovieDetailsViewState,
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
+            .verticalScroll(state = rememberScrollState()),
     ) {
-        item {
             MovieImage(movieDetailsViewState)
-        }
 
-        item {
             MovieOverview(movieDetailsViewState)
-        }
 
-        item {
             MovieCrewman(movieDetailsViewState)
-        }
 
-        item {
             MovieCast(movieDetailsViewState)
-        }
     }
 }
 
