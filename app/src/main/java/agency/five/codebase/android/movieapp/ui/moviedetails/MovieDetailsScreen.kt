@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,7 +76,7 @@ fun MovieCast(
 ) {
     Column {
         Text(
-            text = "Top Billed Cast",
+            text = stringResource(id = R.string.topBilledCastTitle),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.primary,
@@ -130,7 +131,7 @@ fun MovieOverview(
             .padding(horizontal = 15.dp)
     ) {
         Text(
-            text = "Overview",
+            text =  stringResource(id = R.string.overviewTitle),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.primary,
@@ -170,7 +171,7 @@ fun MovieImage(
                             .padding(horizontal = 5.dp)
                     )
                     Text(
-                        text = "User score",
+                        text = stringResource(id = R.string.userScoreTitle),
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.onPrimary,
                     )
