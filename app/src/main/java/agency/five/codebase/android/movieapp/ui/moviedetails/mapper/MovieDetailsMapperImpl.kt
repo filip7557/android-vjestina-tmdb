@@ -9,17 +9,6 @@ import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsViewSta
 
 class MovieDetailsMapperImpl : MovieDetailsMapper {
     override fun toMovieDetailsViewState(movieDetails: MovieDetails): MovieDetailsViewState {
-        val crewmen = mutableListOf<CrewmanViewState>()
-        val actors = mutableListOf<ActorViewState>()
-
-        for(crewman in movieDetails.crew) {
-            crewmen.add(CrewmanViewState(CrewItemViewState(crewman.name, crewman.job)))
-        }
-
-        for(actor in movieDetails.cast) {
-            actors.add(ActorViewState(ActorCardViewState(actor.imageUrl, actor.name, actor.character)))
-        }
-
         return MovieDetailsViewState(
             movieDetails.movie.id,
             movieDetails.movie.imageUrl,
@@ -27,8 +16,8 @@ class MovieDetailsMapperImpl : MovieDetailsMapper {
             movieDetails.movie.title,
             movieDetails.movie.overview,
             movieDetails.movie.isFavorite,
-            crewmen,
-            actors,
+            movieDetails.crew.map { CrewmanViewState(CrewItemViewState(it.name, it.job)) },
+            movieDetails.cast.map { ActorViewState(ActorCardViewState(it.imageUrl, it.name, it.character)) },
         )
     }
 }
