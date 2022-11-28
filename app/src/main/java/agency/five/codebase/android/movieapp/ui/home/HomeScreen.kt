@@ -144,13 +144,14 @@ fun UpcomingMovies(
             .padding(10.dp)
     ) {
         items(upcomingViewState.movieCategories.size) {category ->
+            val movieCategoryLabelViewState = upcomingViewState.movieCategories[category]
             MovieCategoryLabel(
                 movieCategoryLabelViewState = MovieCategoryLabelViewState(
-                    upcomingViewState.movieCategories[category].itemId,
-                    upcomingViewState.movieCategories[category].isSelected,
-                    upcomingViewState.movieCategories[category].categoryText
+                    movieCategoryLabelViewState.itemId,
+                    movieCategoryLabelViewState.isSelected,
+                    movieCategoryLabelViewState.categoryText
                 ),
-                onClick = { onLabelClick(upcomingViewState.movieCategories[category].itemId) },
+                onClick = { onLabelClick(movieCategoryLabelViewState.itemId) },
             )
         }
     }
@@ -161,12 +162,13 @@ fun UpcomingMovies(
             .padding(10.dp)
     ) {
         items(upcomingViewState.movies.size) {movie ->
+            val homeMovieViewState = upcomingViewState.movies[movie]
             MovieCard(movieCardViewState = MovieCardViewState(
-                upcomingViewState.movies[movie].imageUrl,
-                upcomingViewState.movies[movie].movieId,
-                upcomingViewState.movies[movie].isFavorite
+                homeMovieViewState.imageUrl,
+                homeMovieViewState.movieId,
+                homeMovieViewState.isFavorite
             ),
-                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(upcomingViewState.movies[movie].movieId)) },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(homeMovieViewState.movieId)) },
                 onIconClick = {}
             )
         }
@@ -195,13 +197,14 @@ fun NowPlayingMovies(
             .padding(10.dp)
     ) {
         items(nowPlayingViewState.movieCategories.size) {category ->
+            val movieCategoryLabelViewState = nowPlayingViewState.movieCategories[category]
             MovieCategoryLabel(
                 movieCategoryLabelViewState = MovieCategoryLabelViewState(
-                    nowPlayingViewState.movieCategories[category].itemId,
-                    nowPlayingViewState.movieCategories[category].isSelected,
-                    nowPlayingViewState.movieCategories[category].categoryText
+                    movieCategoryLabelViewState.itemId,
+                    movieCategoryLabelViewState.isSelected,
+                    movieCategoryLabelViewState.categoryText
                 ),
-                onClick = { onLabelClick(nowPlayingViewState.movieCategories[category].itemId) }
+                onClick = { onLabelClick(movieCategoryLabelViewState.itemId) }
             )
         }
     }
@@ -212,12 +215,13 @@ fun NowPlayingMovies(
             .padding(10.dp)
     ) {
         items(nowPlayingViewState.movies.size) {movie ->
+            val homeMovieViewState = nowPlayingViewState.movies[movie]
             MovieCard(movieCardViewState = MovieCardViewState(
-                nowPlayingViewState.movies[movie].imageUrl,
-                nowPlayingViewState.movies[movie].movieId,
-                nowPlayingViewState.movies[movie].isFavorite
+                homeMovieViewState.imageUrl,
+                homeMovieViewState.movieId,
+                homeMovieViewState.isFavorite
             ),
-                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(nowPlayingViewState.movies[movie].movieId)) },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(homeMovieViewState.movieId)) },
                 onIconClick = {}
             )
         }
@@ -246,13 +250,14 @@ fun PopularMovies(
             .padding(10.dp)
     ) {
         items(popularViewState.movieCategories.size) {category ->
+            val movieCategoryLabelViewState = popularViewState.movieCategories[category]
             MovieCategoryLabel(
                 movieCategoryLabelViewState = MovieCategoryLabelViewState(
-                    popularViewState.movieCategories[category].itemId,
-                    popularViewState.movieCategories[category].isSelected,
-                    popularViewState.movieCategories[category].categoryText
+                    movieCategoryLabelViewState.itemId,
+                    movieCategoryLabelViewState.isSelected,
+                    movieCategoryLabelViewState.categoryText
                 ),
-                onClick = { onLabelClick(popularViewState.movieCategories[category].itemId) }
+                onClick = { onLabelClick(movieCategoryLabelViewState.itemId) }
             )
         }
     }
@@ -263,12 +268,13 @@ fun PopularMovies(
             .padding(10.dp)
     ) {
         items(popularViewState.movies.size) {movie ->
+            val homeMovieViewState = popularViewState.movies[movie]
             MovieCard(movieCardViewState = MovieCardViewState(
-                popularViewState.movies[movie].imageUrl,
-                popularViewState.movies[movie].movieId,
-                popularViewState.movies[movie].isFavorite
+                homeMovieViewState.imageUrl,
+                homeMovieViewState.movieId,
+                homeMovieViewState.isFavorite
             ),
-                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(popularViewState.movies[movie].movieId)) },
+                onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(homeMovieViewState.movieId)) },
                 onIconClick = {}
             )
         }
