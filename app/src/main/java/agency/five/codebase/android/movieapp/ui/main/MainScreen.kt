@@ -80,6 +80,9 @@ fun MainScreen() {
                     HomeScreenRoute(
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
+                        },
+                        onFavoriteButtonClicked = {
+                            //add/remove movie from favorites
                         }
                     )
                 }
