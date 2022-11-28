@@ -9,18 +9,16 @@ import agency.five.codebase.android.movieapp.ui.component.FavoriteButton
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,25 +39,27 @@ val movieDetailsViewState = MovieDetailsMapper.toMovieDetailsViewState(MoviesMoc
 
 @Composable
 fun MovieDetailsRoute(
-    //actions
+    onFavoriteButtonClick: () -> Unit
 ) {
     val detailsViewState by remember { mutableStateOf(movieDetailsViewState) }
 
     MovieDetailsScreen(
         detailsViewState,
+        onFavoriteButtonClick
     )
 }
 
 @Composable
 fun MovieDetailsScreen(
     movieDetailsViewState: MovieDetailsViewState,
+    onFavoriteButtonClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
             .verticalScroll(state = rememberScrollState()),
     ) {
-            MovieImage(movieDetailsViewState)
+            MovieImage(movieDetailsViewState, onFavoriteButtonClick)
 
             MovieOverview(movieDetailsViewState)
 
@@ -148,7 +147,8 @@ fun MovieOverview(
 
 @Composable
 fun MovieImage(
-    movieDetailsViewState: MovieDetailsViewState
+    movieDetailsViewState: MovieDetailsViewState,
+    onFavoriteButtonClick: () -> Unit,
 ) {
         Box(
             contentAlignment = Alignment.BottomStart
@@ -186,7 +186,7 @@ fun MovieImage(
                 )
                 FavoriteButton(
                     isSelected = movieDetailsViewState.isFavorite,
-                    onClick = { /*TODO*/ },
+                    onClick = onFavoriteButtonClick,
                     modifier = Modifier
                         .size(50.dp)
                         .padding(8.dp)
@@ -199,6 +199,8 @@ fun MovieImage(
 @Composable
 fun MovieDetailsScreenPreview() {
     MovieAppTheme {
-        MovieDetailsScreen(movieDetailsViewState = movieDetailsViewState)
+        MovieDetailsScreen(movieDetailsViewState = movieDetailsViewState) {
+
+        }
     }
 }
