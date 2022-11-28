@@ -14,25 +14,13 @@ class HomeScreenMapperImpl : HomeScreenMapper {
         selectedMovieCategory: MovieCategory,
         movies: List<Movie>
     ): HomeMovieCategoryViewState {
-        val categories = mutableListOf<MovieCategoryLabelViewState>()
-        val movieViewStates = mutableListOf<HomeMovieViewState>()
 
-        for (movieCategory in movieCategories) {
-            categories.add(
-                MovieCategoryLabelViewState(itemId = movieCategory.ordinal,
-                    isSelected = selectedMovieCategory == movieCategory,
-                    categoryText = MovieCategoryLabelTextViewState.ResourceText(
-                        getResourceTextIdFromMovieCategory(movieCategory)
-                    )
-                )
-            )
-        }
-
-        for (movie in movies) {
-            movieViewStates.add(HomeMovieViewState(movieId = movie.id, imageUrl = movie.imageUrl, isFavorite = movie.isFavorite))
-        }
-
-        return HomeMovieCategoryViewState(categories, movieViewStates)
+        return HomeMovieCategoryViewState(
+            movieCategories.map { MovieCategoryLabelViewState(itemId = it.ordinal,
+                isSelected = selectedMovieCategory == it,
+                categoryText = MovieCategoryLabelTextViewState.ResourceText(getResourceTextIdFromMovieCategory(it))) },
+            movies.map { HomeMovieViewState(movieId = it.id, imageUrl = it.imageUrl, isFavorite = it.isFavorite) }
+        )
     }
 }
 
