@@ -43,7 +43,7 @@ fun FavoritesScreen(
     onNavigateToMovieDetails: (String) -> Unit,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(count = 3),
         contentPadding = PaddingValues(8.dp),
     ) {
         header {
