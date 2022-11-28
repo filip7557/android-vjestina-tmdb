@@ -96,7 +96,11 @@ fun MainScreen() {
                     route = MovieDetailsDestination.route,
                     arguments = listOf(navArgument(MOVIE_ID_KEY) { type = NavType.IntType }),
                 ) {
-                    MovieDetailsRoute()
+                    MovieDetailsRoute(
+                        onFavoriteButtonClick = {
+                            //needs to add/remove movie from favorites
+                        }
+                    )
                 }
             }
         }
