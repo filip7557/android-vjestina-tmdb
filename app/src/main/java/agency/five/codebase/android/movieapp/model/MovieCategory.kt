@@ -11,7 +11,6 @@ enum class MovieCategory {
     UPCOMING_THISWEEK;
 
     companion object {
-        private val VALUES = values()
-        fun getByOrdinal(ordinal: Int) = VALUES.firstOrNull { it.ordinal == ordinal }
+        fun getByOrdinal(ordinal: Int) = values().firstOrNull { it.ordinal == ordinal }
     }
 }
