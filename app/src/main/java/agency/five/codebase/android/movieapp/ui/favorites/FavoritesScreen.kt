@@ -42,14 +42,6 @@ fun FavoritesScreen(
     favoritesViewState: FavoritesViewState,
     onNavigateToMovieDetails: (String) -> Unit,
 ) {
-        FavoritesLazyVerticalGrid(favoritesViewState, onNavigateToMovieDetails)
-}
-
-@Composable
-fun FavoritesLazyVerticalGrid(
-    favoritesViewState: FavoritesViewState,
-    onNavigateToMovieDetails: (String) -> Unit
-) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
