@@ -10,4 +10,10 @@
     <string name="this_week">This Week</string>
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
+    <string name="topBilledCastTitle">Top Billed Cast</string>
+    <string name="overviewTitle">Overview</string>
+    <string name="userScoreTitle">User score</string>
+    <string name="popularTitle">What\'s popular</string>
+    <string name="nowPlayingTitle">Now playing</string>
+    <string name="upcomingTitle">Upcoming</string>
 </resources>
