@@ -1,9 +1,7 @@
 package agency.five.codebase.android.movieapp.ui.favorites
 
 import agency.five.codebase.android.movieapp.mock.MoviesMock
-import agency.five.codebase.android.movieapp.navigation.MovieAppDestination
 import agency.five.codebase.android.movieapp.navigation.MovieDetailsDestination
-import agency.five.codebase.android.movieapp.navigation.NavigationItem
 import agency.five.codebase.android.movieapp.ui.component.MovieCard
 import agency.five.codebase.android.movieapp.ui.favorites.mapper.FavoritesMapper
 import agency.five.codebase.android.movieapp.ui.favorites.mapper.FavoritesMapperImpl
@@ -32,12 +30,10 @@ fun FavoritesRoute(
     onNavigateToMovieDetails: (String) -> Unit
 ) {
     val favoritesViewState by remember { mutableStateOf(favoritesViewState) }
-    // ...
 
     FavoritesScreen(
         favoritesViewState,
         onNavigateToMovieDetails
-        // other states and actions
     )
 }
 
@@ -45,7 +41,6 @@ fun FavoritesRoute(
 fun FavoritesScreen(
     favoritesViewState: FavoritesViewState,
     onNavigateToMovieDetails: (String) -> Unit,
-    // other states and actions
 ) {
         FavoritesLazyVerticalGrid(favoritesViewState, onNavigateToMovieDetails)
 }
