@@ -1,10 +1,17 @@
 package agency.five.codebase.android.movieapp.ui.main
 
 import agency.five.codebase.android.movieapp.R
+import agency.five.codebase.android.movieapp.data.repository.FakeMovieRepository
 import agency.five.codebase.android.movieapp.navigation.*
 import agency.five.codebase.android.movieapp.ui.favorites.FavoritesRoute
+import agency.five.codebase.android.movieapp.ui.favorites.FavoritesViewModel
+import agency.five.codebase.android.movieapp.ui.favorites.mapper.FavoritesMapperImpl
 import agency.five.codebase.android.movieapp.ui.home.HomeScreenRoute
+import agency.five.codebase.android.movieapp.ui.home.HomeViewModel
+import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapperImpl
 import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsRoute
+import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsViewModel
+import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun MainScreen() {
@@ -78,17 +86,19 @@ fun MainScreen() {
             ) {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeScreenRoute(
+                        viewModel = HomeViewModel(FakeMovieRepository(Dispatchers.IO), HomeScreenMapperImpl()),
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         },
-                        onFavoriteButtonClicked = {
-                            //add/remove movie from favorites
-                        }
                     )
                 }
 
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
+                        viewModel = FavoritesViewModel(FakeMovieRepository(
+                            Dispatchers.IO),
+                            FavoritesMapperImpl()
+                        ),
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         }
@@ -99,10 +109,9 @@ fun MainScreen() {
                     route = MovieDetailsDestination.route,
                     arguments = listOf(navArgument(MOVIE_ID_KEY) { type = NavType.IntType }),
                 ) {
+                    val movieId = it.arguments?.getInt(MOVIE_ID_KEY)
                     MovieDetailsRoute(
-                        onFavoriteButtonClick = {
-                            //needs to add/remove movie from favorites
-                        }
+                        MovieDetailsViewModel(FakeMovieRepository(Dispatchers.IO), MovieDetailsMapperImpl(), movieId!!)
                     )
                 }
             }
