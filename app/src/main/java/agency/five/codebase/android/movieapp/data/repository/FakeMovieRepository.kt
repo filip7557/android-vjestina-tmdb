@@ -8,6 +8,10 @@ import agency.five.codebase.android.movieapp.model.MovieDetails
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 class FakeMovieRepository(
     private val ioDispatcher: CoroutineDispatcher,
@@ -43,12 +47,17 @@ class FakeMovieRepository(
                         isFavorite = favoriteIds.contains(movieDetails.movie.id)
                     )
                 )
+                if(movieDetails.movie.isFavorite) {
+                    favoriteIds.plusElement(movieId)
+                }
+                movieDetails
             }
             .flowOn(ioDispatcher)
 
     override fun favoriteMovies(): Flow<List<Movie>> = movies.map {
         it.filter { fakeMovie -> fakeMovie.isFavorite }
     }.transform { emit(it) }
+
 
     override suspend fun addMovieToFavorites(movieId: Int) {
         FavoritesDBMock.insert(movieId)
