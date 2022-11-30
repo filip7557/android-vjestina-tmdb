@@ -1,14 +1,13 @@
 package agency.five.codebase.android.movieapp.ui.home
 
 import agency.five.codebase.android.movieapp.R
-import agency.five.codebase.android.movieapp.mock.MoviesMock
-import agency.five.codebase.android.movieapp.model.MovieCategory
+import agency.five.codebase.android.movieapp.data.repository.FakeMovieRepository
+import agency.five.codebase.android.movieapp.mock.FavoritesDBMock
 import agency.five.codebase.android.movieapp.navigation.MovieDetailsDestination
 import agency.five.codebase.android.movieapp.ui.component.MovieCard
 import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
 import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabel
 import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabelViewState
-import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapper
 import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -17,85 +16,43 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-private val homeScreenMapper: HomeScreenMapper = HomeScreenMapperImpl()
-
-val popularCategoryLabels = listOf(
-    MovieCategory.POPULAR_STREAMING,
-    MovieCategory.POPULAR_ONTV,
-    MovieCategory.POPULAR_FORRENT,
-    MovieCategory.POPULAR_INTHEATHERS
-)
-
-val nowPlayingCategoryLabels = listOf(
-    MovieCategory.NOWPLAYING_MOVIES,
-    MovieCategory.NOWPLAYING_TV
-)
-
-val upcomingCategoryLabels = listOf(
-    MovieCategory.UPCOMING_TODAY,
-    MovieCategory.UPCOMING_THISWEEK
-)
-
-val popularCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-    popularCategoryLabels,
-    MovieCategory.POPULAR_STREAMING,
-    MoviesMock.getMoviesList()
-)
-val nowPlayingCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-    nowPlayingCategoryLabels,
-    MovieCategory.NOWPLAYING_MOVIES,
-    MoviesMock.getMoviesList()
-)
-val upcomingCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-    upcomingCategoryLabels,
-    MovieCategory.UPCOMING_TODAY,
-    MoviesMock.getMoviesList()
-)
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun HomeScreenRoute(
+    viewModel: HomeViewModel,
     onNavigateToMovieDetails: (String) -> Unit,
-    onFavoriteButtonClicked: () -> Unit
 ) {
-    var popularViewState by remember { mutableStateOf(popularCategoryViewState) }
-    var nowPlayingViewState by remember { mutableStateOf(nowPlayingCategoryViewState) }
-    var upcomingViewState by remember { mutableStateOf(upcomingCategoryViewState) }
+    val popularViewState: HomeMovieCategoryViewState by viewModel.popularViewState.collectAsState()
+    val nowPlayingViewState: HomeMovieCategoryViewState by viewModel.nowPlayingViewState.collectAsState()
+    val upcomingViewState: HomeMovieCategoryViewState by viewModel.upcomingViewState.collectAsState()
 
     HomeScreen(
         popularViewState = popularViewState,
         nowPlayingViewState = nowPlayingViewState,
         upcomingViewState = upcomingViewState,
         onPopularLabelClick = {
-            popularViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-                popularCategoryLabels,
-                MovieCategory.getByOrdinal(it)!!,
-                MoviesMock.getMoviesList()
-            )
+            viewModel.onPopularLabelClick(it)
         },
         onNowPlayingLabelClick = {
-            nowPlayingViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-                nowPlayingCategoryLabels,
-                MovieCategory.getByOrdinal(it)!!,
-                MoviesMock.getMoviesList()
-            )
+            viewModel.onNowPlayingLabelClick(it)
         },
         onUpcomingLabelClick = {
-            upcomingViewState = homeScreenMapper.toHomeMovieCategoryViewState(
-                upcomingCategoryLabels,
-                MovieCategory.getByOrdinal(it)!!,
-                MoviesMock.getMoviesList()
-            )
+            viewModel.onUpcomingLabelClick(it)
         },
         onNavigateToMovieDetails = onNavigateToMovieDetails,
-        onFavoriteButtonClicked = onFavoriteButtonClicked
+        onFavoriteButtonClicked = {
+            viewModel.toggleFavorites(it)
+        }
     )
 }
 
@@ -108,7 +65,7 @@ fun HomeScreen(
     onNowPlayingLabelClick: (Int) -> Unit,
     onUpcomingLabelClick: (Int) -> Unit,
     onNavigateToMovieDetails: (String) -> Unit,
-    onFavoriteButtonClicked: () -> Unit
+    onFavoriteButtonClicked: (Int) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(25.dp)
@@ -133,7 +90,7 @@ fun HomeMovieCategory(
     onLabelClick: (Int) -> Unit,
     onNavigateToMovieDetails: (String) -> Unit,
     title: String,
-    onFavoriteButtonClicked: () -> Unit
+    onFavoriteButtonClicked: (Int) -> Unit
 ) {
     Text(
         text = title,
@@ -176,7 +133,7 @@ fun HomeMovieCategory(
                 movieState.isFavorite
             ),
                 onClick = { onNavigateToMovieDetails(MovieDetailsDestination.createNavigation(movieState.movieId)) },
-                onIconClick = onFavoriteButtonClicked
+                onIconClick = { onFavoriteButtonClicked(movieState.movieId) }
             )
         }
     }
@@ -185,8 +142,14 @@ fun HomeMovieCategory(
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    FavoritesDBMock.insert(2)
     MovieAppTheme {
-        HomeScreenRoute({}) {
+        HomeScreenRoute(
+            HomeViewModel(
+                FakeMovieRepository(Dispatchers.IO),
+                HomeScreenMapperImpl(),
+            ),
+        ) {
 
         }
     }

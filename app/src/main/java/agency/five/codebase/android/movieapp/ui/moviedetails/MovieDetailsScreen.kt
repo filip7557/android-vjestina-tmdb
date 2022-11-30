@@ -1,12 +1,11 @@
 package agency.five.codebase.android.movieapp.ui.moviedetails
 
 import agency.five.codebase.android.movieapp.R
-import agency.five.codebase.android.movieapp.mock.MoviesMock
+import agency.five.codebase.android.movieapp.data.repository.FakeMovieRepository
 import agency.five.codebase.android.movieapp.ui.component.ActorCard
 import agency.five.codebase.android.movieapp.ui.component.CircularProgressBar
 import agency.five.codebase.android.movieapp.ui.component.CrewItem
 import agency.five.codebase.android.movieapp.ui.component.FavoriteButton
-import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import androidx.compose.foundation.background
@@ -20,11 +19,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,27 +32,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-
-private val MovieDetailsMapper: MovieDetailsMapper = MovieDetailsMapperImpl()
-
-val movieDetailsViewState = MovieDetailsMapper.toMovieDetailsViewState(MoviesMock.getMovieDetails())
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun MovieDetailsRoute(
-    onFavoriteButtonClick: () -> Unit
+    viewModel: MovieDetailsViewModel
 ) {
-    val detailsViewState by remember { mutableStateOf(movieDetailsViewState) }
+    val movieDetailsViewState: MovieDetailsViewState by viewModel.movieDetailsViewState.collectAsState()
 
     MovieDetailsScreen(
-        detailsViewState,
-        onFavoriteButtonClick
+        movieDetailsViewState = movieDetailsViewState,
+        onFavoriteButtonClick = {
+            viewModel.toggleFavorite(it)
+        }
     )
 }
 
 @Composable
 fun MovieDetailsScreen(
     movieDetailsViewState: MovieDetailsViewState,
-    onFavoriteButtonClick: () -> Unit,
+    onFavoriteButtonClick: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -89,7 +88,7 @@ fun MovieCast(
         ) {
             items(movieDetailsViewState.cast.size) { actor ->
                 ActorCard(
-                    actorCardViewState = movieDetailsViewState.cast[actor].actorCardViewState,
+                    actorCardViewState = movieDetailsViewState.cast[actor],
                     modifier = Modifier
                         .size(width = 140.dp, height = 220.dp)
                 )
@@ -113,7 +112,7 @@ fun MovieCrewman(
             movieDetailsViewState.crew,
         ) { crewman ->
             CrewItem(
-                crewItemViewState = crewman.crewItemViewState,
+                crewItemViewState = crewman,
                 modifier = Modifier
                     .padding(vertical = 10.dp, horizontal = 8.dp)
             )
@@ -148,19 +147,37 @@ fun MovieOverview(
 @Composable
 fun MovieImage(
     movieDetailsViewState: MovieDetailsViewState,
-    onFavoriteButtonClick: () -> Unit,
+    onFavoriteButtonClick: (Int) -> Unit,
 ) {
         Box(
-            contentAlignment = Alignment.BottomStart
+            contentAlignment = Alignment.BottomStart,
+            modifier = Modifier.fillMaxWidth()
         ) {
             AsyncImage(
                 model = movieDetailsViewState.imageUrl,
                 contentDescription = null,
+                alignment = Alignment.TopCenter,
                 modifier = Modifier
-                    .height(350.dp)
+                    .height(300.dp)
                     .fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
+
+            Spacer(
+                Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                MaterialTheme.colors.onSurface
+                            )
+                        )
+                    )
+                    .align(Alignment.Center)
+            )
+
             Column {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -186,7 +203,7 @@ fun MovieImage(
                 )
                 FavoriteButton(
                     isSelected = movieDetailsViewState.isFavorite,
-                    onClick = onFavoriteButtonClick,
+                    onClick = { onFavoriteButtonClick(movieDetailsViewState.id) },
                     modifier = Modifier
                         .size(50.dp)
                         .padding(8.dp)
@@ -199,8 +216,6 @@ fun MovieImage(
 @Composable
 fun MovieDetailsScreenPreview() {
     MovieAppTheme {
-        MovieDetailsScreen(movieDetailsViewState = movieDetailsViewState) {
-
-        }
+        MovieDetailsRoute(viewModel = MovieDetailsViewModel(FakeMovieRepository(Dispatchers.IO), MovieDetailsMapperImpl(), 2))
     }
 }
