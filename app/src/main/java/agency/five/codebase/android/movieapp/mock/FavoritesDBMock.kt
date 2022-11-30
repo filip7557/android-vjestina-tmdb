@@ -4,11 +4,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 object FavoritesDBMock {
 
-    val favoriteIds = MutableStateFlow(setOf<Int>())
+    val favoriteIds = MutableStateFlow(setOf(1,2,3,5))
     fun insert(movieId: Int) {
-        favoriteIds.value.plusElement(movieId)
+        favoriteIds.value += movieId
     }
     fun delete(movieId: Int) {
-        favoriteIds.value.minusElement(movieId)
+        favoriteIds.value -= movieId
     }
 }
