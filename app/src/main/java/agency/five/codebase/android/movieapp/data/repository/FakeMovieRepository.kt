@@ -58,7 +58,6 @@ class FakeMovieRepository(
         it.filter { fakeMovie -> fakeMovie.isFavorite }
     }.transform { emit(it) }
 
-
     override suspend fun addMovieToFavorites(movieId: Int) {
         FavoritesDBMock.insert(movieId)
     }
