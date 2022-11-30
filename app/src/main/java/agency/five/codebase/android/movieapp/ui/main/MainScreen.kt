@@ -36,6 +36,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import kotlinx.coroutines.Dispatchers
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainScreen() {
@@ -50,6 +52,9 @@ fun MainScreen() {
     }
 
     val showBackIcon = !showBottomBar
+
+    val homeViewModel = getViewModel<HomeViewModel>()
+    val favoritesViewModel = getViewModel<FavoritesViewModel>()
 
     Scaffold(
         topBar = {
@@ -91,7 +96,7 @@ fun MainScreen() {
             ) {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeScreenRoute(
-                        viewModel = HomeViewModel(FakeMovieRepository(Dispatchers.IO), HomeScreenMapperImpl()),
+                        viewModel = homeViewModel,
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         },
@@ -100,10 +105,7 @@ fun MainScreen() {
 
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
-                        viewModel = FavoritesViewModel(FakeMovieRepository(
-                            Dispatchers.IO),
-                            FavoritesMapperImpl()
-                        ),
+                        viewModel = favoritesViewModel,
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         }
@@ -115,9 +117,8 @@ fun MainScreen() {
                     arguments = listOf(navArgument(MOVIE_ID_KEY) { type = NavType.IntType }),
                 ) {
                     val movieId = it.arguments?.getInt(MOVIE_ID_KEY)
-                    MovieDetailsRoute(
-                        MovieDetailsViewModel(FakeMovieRepository(Dispatchers.IO), MovieDetailsMapperImpl(), movieId!!)
-                    )
+                    val viewModel = getViewModel<MovieDetailsViewModel>(parameters = { parametersOf(movieId) })
+                    MovieDetailsRoute(viewModel)
                 }
             }
         }
