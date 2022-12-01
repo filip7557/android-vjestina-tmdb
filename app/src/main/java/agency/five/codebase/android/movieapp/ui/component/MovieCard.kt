@@ -1,6 +1,7 @@
 package agency.five.codebase.android.movieapp.ui.component
 
 import agency.five.codebase.android.movieapp.mock.MoviesMock.getMoviesList
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material.Card
@@ -21,18 +22,20 @@ data class MovieCardViewState(
 @Composable
 fun MovieCard(
     movieCardViewState: MovieCardViewState,
+    onIconClick: () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
-        shape = AbsoluteRoundedCornerShape(18.dp),
+        shape = AbsoluteRoundedCornerShape(10.dp),
     ) {
         AsyncImage(
             model = movieCardViewState.imageUrl,
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth(1f),
+                .fillMaxWidth(1f)
+                .clickable(onClick = onClick),
             contentScale = ContentScale.FillWidth
         )
         Box(
@@ -42,9 +45,9 @@ fun MovieCard(
         ) {
             FavoriteButton(
                 isSelected = movieCardViewState.isFavorite,
-                onClick = onClick,
+                onClick = onIconClick,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(30.dp)
             )
         }
     }
@@ -58,6 +61,7 @@ fun MovieCardPreview() {
         movieId = movie.id, isFavorite = movie.isFavorite),
         modifier = Modifier
             .size(200.dp, 295.dp),
+        onIconClick = {},
         onClick = { /*TODO later with data*/ }
     )
 }
