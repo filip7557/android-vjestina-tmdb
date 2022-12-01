@@ -34,7 +34,12 @@ fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val showBottomBar by remember { derivedStateOf {navBackStackEntry?.destination?.route == HOME_ROUTE || navBackStackEntry?.destination?.route == FAVORITES_ROUTE} }
+    val showBottomBar by remember {
+        derivedStateOf {
+            navBackStackEntry?.destination?.route == HOME_ROUTE ||
+                    navBackStackEntry?.destination?.route == FAVORITES_ROUTE
+        }
+    }
 
     val showBackIcon = !showBottomBar
 
