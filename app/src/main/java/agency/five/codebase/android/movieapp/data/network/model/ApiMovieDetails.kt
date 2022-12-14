@@ -111,3 +111,45 @@ data class BelongsToCollection(
     @SerialName("poster_path")
     val poster_path: String?,
 )
+
+@Serializable
+data class Genre(
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("name")
+    val name: String
+)
+
+@Serializable
+data class ProductionCompany(
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("logo_path")
+    val logo_path: String? = null,
+
+    @SerialName("name")
+    val name: String,
+
+    @SerialName("origin_country")
+    val origin_country: String
+)
+
+@Serializable
+data class ProductionCountry(
+    @SerialName("iso_3166_1")
+    val iso_3166_1: String,
+
+    @SerialName("name")
+    val name: String
+)
+
+@Serializable
+data class SpokenLanguage(
+    @SerialName("iso_639_1")
+    val iso_639_1: String,
+
+    @SerialName("name")
+    val name: String
+)
