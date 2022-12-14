@@ -96,3 +96,18 @@ data class ApiMovieDetails(
         cast = cast
     )
 }
+
+@Serializable
+data class BelongsToCollection(
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("name")
+    val name: String,
+
+    @SerialName("backdrop_path")
+    val backdrop_path: String?,
+
+    @SerialName("poster_path")
+    val poster_path: String?,
+)
