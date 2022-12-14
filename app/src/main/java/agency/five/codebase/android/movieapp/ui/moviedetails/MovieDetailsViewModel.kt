@@ -4,27 +4,23 @@ import agency.five.codebase.android.movieapp.data.repository.MovieRepository
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
     private val movieDetailsMapper: MovieDetailsMapper,
-    private val movieId: Int
+    movieId: Int
 ) : ViewModel() {
 
-    private val _movieDetailsViewState = MutableStateFlow(MovieDetailsViewState())
-    val movieDetailsViewState: StateFlow<MovieDetailsViewState> = _movieDetailsViewState.asStateFlow()
-
-    init {
-        viewModelScope.launch{
-            movieRepository.movieDetails(movieId).collect {
-                _movieDetailsViewState.value = movieDetailsMapper.toMovieDetailsViewState(it)
-            }
-        }
-    }
+    val movieDetailsViewState: StateFlow<MovieDetailsViewState> =
+        movieRepository.movieDetails(movieId)
+            .map(movieDetailsMapper::toMovieDetailsViewState)
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                MovieDetailsViewState()
+            )
 
     fun toggleFavorite(movieId: Int) {
         viewModelScope.launch {
