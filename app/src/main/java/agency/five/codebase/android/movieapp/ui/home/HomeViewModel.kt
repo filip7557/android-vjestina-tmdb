@@ -5,11 +5,11 @@ import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val movieRepository: MovieRepository,
     private val homeScreenMapper: HomeScreenMapper,
@@ -32,89 +32,114 @@ class HomeViewModel(
         MovieCategory.UPCOMING_THISWEEK
     )
 
-    private val _popularViewState = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
-    val popularViewState: StateFlow<HomeMovieCategoryViewState> = _popularViewState.asStateFlow()
 
-    private val _nowPlayingViewState = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
-    val nowPlayingViewState: StateFlow<HomeMovieCategoryViewState> = _nowPlayingViewState.asStateFlow()
-
-    private val _upcomingViewState = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
-    val upcomingViewState: StateFlow<HomeMovieCategoryViewState> = _upcomingViewState.asStateFlow()
-
-    init {
-        getPopularMovies(homeScreenMapper)
-        getNowPlayingMovies(homeScreenMapper)
-        getUpcomingMovies(homeScreenMapper)
-    }
-
-    private fun getPopularMovies(mapper: HomeScreenMapper) {
-        viewModelScope.launch {
-            movieRepository.popularMovies(MovieCategory.POPULAR_STREAMING).collect {
-                _popularViewState.value = mapper.toHomeMovieCategoryViewState(
-                    movieCategories = popularCategoryLabels,
-                    selectedMovieCategory = MovieCategory.POPULAR_STREAMING,
-                    movies = it
-                )
+    private val popularMoviesCategorySelected = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
+    val popularViewState: StateFlow<HomeMovieCategoryViewState> = popularMoviesCategorySelected
+            .flatMapLatest { selectedMovieCategory ->
+                val selectedCategory = MovieCategory.getByOrdinal(selectedMovieCategory.movieCategories.first { p -> p.isSelected }.itemId)!!
+                movieRepository.popularMovies(selectedCategory)
+                    .map {
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            popularCategoryLabels,
+                            selectedCategory,
+                            it
+                        )
+                    }
             }
-        }
-    }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                HomeMovieCategoryViewState(listOf(), listOf())
+            )
 
-    private fun getNowPlayingMovies(mapper: HomeScreenMapper) {
-        viewModelScope.launch {
-            movieRepository.nowPlayingMovies(MovieCategory.NOWPLAYING_MOVIES).collect {
-                _nowPlayingViewState.value = mapper.toHomeMovieCategoryViewState(
-                    movieCategories = nowPlayingCategoryLabels,
-                    selectedMovieCategory = MovieCategory.NOWPLAYING_MOVIES,
-                    movies = it
-                )
+    private val nowPlayingMoviesCategorySelected = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
+    val nowPlayingViewState: StateFlow<HomeMovieCategoryViewState> = nowPlayingMoviesCategorySelected
+        .flatMapLatest { selectedMovieCategory ->
+            val selectedCategory = MovieCategory.getByOrdinal(selectedMovieCategory.movieCategories.first { p -> p.isSelected }.itemId)!!
+            movieRepository.popularMovies(selectedCategory)
+                .map {
+                    homeScreenMapper.toHomeMovieCategoryViewState(
+                        nowPlayingCategoryLabels,
+                        selectedCategory,
+                        it
+                    )
+                }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            HomeMovieCategoryViewState(listOf(), listOf())
+        )
+
+    private val upcomingMoviesCategorySelected = MutableStateFlow(HomeMovieCategoryViewState(listOf(), listOf()))
+    val upcomingViewState: StateFlow<HomeMovieCategoryViewState> = upcomingMoviesCategorySelected
+        .flatMapLatest { selectedMovieCategory ->
+            val selectedCategory = MovieCategory.getByOrdinal(selectedMovieCategory.movieCategories.first { p -> p.isSelected }.itemId)!!
+            movieRepository.popularMovies(selectedCategory)
+                .map {
+                    homeScreenMapper.toHomeMovieCategoryViewState(
+                        upcomingCategoryLabels,
+                        selectedCategory,
+                        it
+                    )
+                }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            HomeMovieCategoryViewState(listOf(), listOf())
+        )
+
+    fun onCategoryLabelClick(categoryId: Int){
+        when (categoryId) {
+            MovieCategory.POPULAR_STREAMING.ordinal,
+            MovieCategory.POPULAR_FORRENT.ordinal,
+            MovieCategory.POPULAR_ONTV.ordinal,
+            MovieCategory.POPULAR_INTHEATHERS.ordinal
+            -> {
+                viewModelScope.launch {
+                    movieRepository.popularMovies(MovieCategory.POPULAR_STREAMING).collect {
+                       popularMoviesCategorySelected.emit(
+                           homeScreenMapper.toHomeMovieCategoryViewState(
+                               movieCategories = popularCategoryLabels,
+                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                                movies = it
+                           )
+                       )
+                    }
+                }
             }
-        }
-    }
 
-    private fun getUpcomingMovies(mapper: HomeScreenMapper) {
-        viewModelScope.launch {
-            movieRepository.upcomingMovies(MovieCategory.UPCOMING_TODAY).collect {
-                _upcomingViewState.value = mapper.toHomeMovieCategoryViewState(
-                    movieCategories = upcomingCategoryLabels,
-                    selectedMovieCategory = MovieCategory.UPCOMING_TODAY,
-                    movies = it
-                )
+            MovieCategory.NOWPLAYING_MOVIES.ordinal,
+            MovieCategory.NOWPLAYING_TV.ordinal
+            -> {
+                viewModelScope.launch {
+                    movieRepository.nowPlayingMovies(MovieCategory.NOWPLAYING_MOVIES).collect {
+                        nowPlayingMoviesCategorySelected.emit(
+                            homeScreenMapper.toHomeMovieCategoryViewState(
+                                movieCategories = popularCategoryLabels,
+                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                                movies = it
+                            )
+                        )
+                    }
+                }
             }
-        }
-    }
 
-    fun onPopularLabelClick(id: Int) {
-        viewModelScope.launch {
-            movieRepository.popularMovies(MovieCategory.POPULAR_STREAMING).collect {
-                _popularViewState.value = homeScreenMapper.toHomeMovieCategoryViewState(
-                    movieCategories = popularCategoryLabels,
-                    selectedMovieCategory = MovieCategory.getByOrdinal(id)!!,
-                    movies = it
-                )
-            }
-        }
-    }
-
-    fun onNowPlayingLabelClick(id: Int) {
-        viewModelScope.launch {
-            movieRepository.nowPlayingMovies(MovieCategory.NOWPLAYING_MOVIES).collect {
-                _nowPlayingViewState.value = homeScreenMapper.toHomeMovieCategoryViewState(
-                    movieCategories = nowPlayingCategoryLabels,
-                    selectedMovieCategory = MovieCategory.getByOrdinal(id)!!,
-                    movies = it
-                )
-            }
-        }
-    }
-
-    fun onUpcomingLabelClick(id: Int) {
-        viewModelScope.launch {
-            movieRepository.upcomingMovies(MovieCategory.UPCOMING_TODAY).collect {
-                _upcomingViewState.value = homeScreenMapper.toHomeMovieCategoryViewState(
-                    movieCategories = upcomingCategoryLabels,
-                    selectedMovieCategory = MovieCategory.getByOrdinal(id)!!,
-                    movies = it
-                )
+            MovieCategory.UPCOMING_TODAY.ordinal,
+            MovieCategory.UPCOMING_THISWEEK.ordinal
+            -> {
+                viewModelScope.launch {
+                    movieRepository.upcomingMovies(MovieCategory.UPCOMING_TODAY).collect {
+                        upcomingMoviesCategorySelected.emit(
+                            homeScreenMapper.toHomeMovieCategoryViewState(
+                                movieCategories = popularCategoryLabels,
+                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                                movies = it
+                            )
+                        )
+                    }
+                }
             }
         }
     }
