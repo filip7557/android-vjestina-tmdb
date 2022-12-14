@@ -19,7 +19,7 @@ class MovieDetailsViewModel(
             .stateIn(
                 viewModelScope,
                 SharingStarted.Eagerly,
-                MovieDetailsViewState()
+                MovieDetailsViewState.create()
             )
 
     fun toggleFavorite(movieId: Int) {
