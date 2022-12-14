@@ -5,6 +5,7 @@ import agency.five.codebase.android.movieapp.data.network.MovieServiceImpl
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.logging.*
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -17,6 +18,9 @@ val networkModule = module {
             install(Logging) {
                 logger = Logger.DEFAULT
                 level = LogLevel.HEADERS
+            }
+            install(JsonFeature) {
+                serializer = KotlinxSerializer(Json)
             }
         }
     }
