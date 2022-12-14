@@ -1,10 +1,9 @@
 package agency.five.codebase.android.movieapp.data.network.model
 
+import agency.five.codebase.android.movieapp.data.network.BASE_IMAGE_URL
 import agency.five.codebase.android.movieapp.model.Movie
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 
 @Serializable
 data class ApiMovie(
