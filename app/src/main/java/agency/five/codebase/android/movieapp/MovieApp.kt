@@ -12,10 +12,12 @@ class MovieApp : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            modules(dataModule)
-            modules(favoritesModule)
-            modules(homeModule)
-            modules(movieDetailsModule)
+            modules(
+                    dataModule,
+                    favoritesModule,
+                    homeModule,
+                    movieDetailsModule
+            )
         }
 
         Log.d("MovieApp", "App started")
