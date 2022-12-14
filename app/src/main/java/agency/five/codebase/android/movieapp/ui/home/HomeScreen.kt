@@ -3,10 +3,7 @@ package agency.five.codebase.android.movieapp.ui.home
 import agency.five.codebase.android.movieapp.R
 import agency.five.codebase.android.movieapp.mock.FavoritesDBMock
 import agency.five.codebase.android.movieapp.navigation.MovieDetailsDestination
-import agency.five.codebase.android.movieapp.ui.component.MovieCard
-import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
-import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabel
-import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabelViewState
+import agency.five.codebase.android.movieapp.ui.component.*
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -37,14 +34,8 @@ fun HomeScreenRoute(
         popularViewState = popularViewState,
         nowPlayingViewState = nowPlayingViewState,
         upcomingViewState = upcomingViewState,
-        onPopularLabelClick = {
-            viewModel.onPopularLabelClick(it)
-        },
-        onNowPlayingLabelClick = {
-            viewModel.onNowPlayingLabelClick(it)
-        },
-        onUpcomingLabelClick = {
-            viewModel.onUpcomingLabelClick(it)
+        onMovieCategoryLabelClick = {
+            viewModel.onCategoryLabelClick(it)
         },
         onNavigateToMovieDetails = onNavigateToMovieDetails,
         onFavoriteButtonClicked = {
@@ -58,9 +49,7 @@ fun HomeScreen(
     popularViewState: HomeMovieCategoryViewState,
     nowPlayingViewState: HomeMovieCategoryViewState,
     upcomingViewState: HomeMovieCategoryViewState,
-    onPopularLabelClick: (Int) -> Unit,
-    onNowPlayingLabelClick: (Int) -> Unit,
-    onUpcomingLabelClick: (Int) -> Unit,
+    onMovieCategoryLabelClick: (Int) -> Unit,
     onNavigateToMovieDetails: (String) -> Unit,
     onFavoriteButtonClicked: (Int) -> Unit
 ) {
@@ -68,15 +57,15 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ) {
         item {
-            HomeMovieCategory(popularViewState, onPopularLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.popularTitle), onFavoriteButtonClicked)
+            HomeMovieCategory(popularViewState, onMovieCategoryLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.popularTitle), onFavoriteButtonClicked)
         }
 
         item {
-            HomeMovieCategory(nowPlayingViewState, onNowPlayingLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.nowPlayingTitle), onFavoriteButtonClicked)
+            HomeMovieCategory(nowPlayingViewState, onMovieCategoryLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.nowPlayingTitle), onFavoriteButtonClicked)
         }
 
         item {
-            HomeMovieCategory(upcomingViewState, onUpcomingLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.upcomingTitle), onFavoriteButtonClicked)
+            HomeMovieCategory(upcomingViewState, onMovieCategoryLabelClick, onNavigateToMovieDetails, stringResource(id = R.string.upcomingTitle), onFavoriteButtonClicked)
         }
     }
 }
