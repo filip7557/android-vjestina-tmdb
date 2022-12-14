@@ -11,7 +11,7 @@ val favoritesModule = module {
         FavoritesViewModel(
             movieRepository = get(),
             favoritesMapper = get()
-            )
+        )
     }
 
     single<FavoritesMapper> { FavoritesMapperImpl() }
