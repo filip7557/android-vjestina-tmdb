@@ -48,7 +48,7 @@ class HomeViewModel(
 
     private fun getPopularMovies() {
         viewModelScope.launch {
-            movieRepository.popularMovies(MovieCategory.POPULAR_STREAMING).collect {
+            movieRepository.movies(MovieCategory.POPULAR_STREAMING).collect {
                 popularMoviesCategorySelected.emit(
                     homeScreenMapper.toHomeMovieCategoryViewState(
                         movieCategories = popularCategoryLabels,
@@ -62,7 +62,7 @@ class HomeViewModel(
 
     private fun getNowPlayingMovies() {
         viewModelScope.launch {
-            movieRepository.nowPlayingMovies(MovieCategory.NOWPLAYING_MOVIES).collect {
+            movieRepository.movies(MovieCategory.NOWPLAYING_MOVIES).collect {
                 nowPlayingMoviesCategorySelected.emit(
                     homeScreenMapper.toHomeMovieCategoryViewState(
                         movieCategories = nowPlayingCategoryLabels,
@@ -76,7 +76,7 @@ class HomeViewModel(
 
     private fun getUpcomingMovies() {
         viewModelScope.launch {
-            movieRepository.upcomingMovies(MovieCategory.UPCOMING_TODAY).collect {
+            movieRepository.movies(MovieCategory.UPCOMING_TODAY).collect {
                 upcomingMoviesCategorySelected.emit(
                     homeScreenMapper.toHomeMovieCategoryViewState(
                         movieCategories = upcomingCategoryLabels,
@@ -96,7 +96,7 @@ class HomeViewModel(
             MovieCategory.POPULAR_INTHEATHERS.ordinal
             -> {
                 viewModelScope.launch {
-                    movieRepository.popularMovies(MovieCategory.POPULAR_STREAMING).collect {
+                    movieRepository.movies(MovieCategory.POPULAR_STREAMING).collect {
                        popularMoviesCategorySelected.emit(
                            homeScreenMapper.toHomeMovieCategoryViewState(
                                movieCategories = popularCategoryLabels,
@@ -112,7 +112,7 @@ class HomeViewModel(
             MovieCategory.NOWPLAYING_TV.ordinal
             -> {
                 viewModelScope.launch {
-                    movieRepository.nowPlayingMovies(MovieCategory.NOWPLAYING_MOVIES).collect {
+                    movieRepository.movies(MovieCategory.NOWPLAYING_MOVIES).collect {
                         nowPlayingMoviesCategorySelected.emit(
                             homeScreenMapper.toHomeMovieCategoryViewState(
                                 movieCategories = nowPlayingCategoryLabels,
@@ -128,7 +128,7 @@ class HomeViewModel(
             MovieCategory.UPCOMING_THISWEEK.ordinal
             -> {
                 viewModelScope.launch {
-                    movieRepository.upcomingMovies(MovieCategory.UPCOMING_TODAY).collect {
+                    movieRepository.movies(MovieCategory.UPCOMING_TODAY).collect {
                         upcomingMoviesCategorySelected.emit(
                             homeScreenMapper.toHomeMovieCategoryViewState(
                                 movieCategories = upcomingCategoryLabels,
