@@ -1,5 +1,6 @@
 package agency.five.codebase.android.movieapp.data.network.model
 
+import agency.five.codebase.android.movieapp.data.network.BASE_IMAGE_URL
 import agency.five.codebase.android.movieapp.model.Actor
 import agency.five.codebase.android.movieapp.model.Crewman
 import agency.five.codebase.android.movieapp.model.Movie
@@ -86,8 +87,14 @@ data class ApiMovieDetails(
     @SerialName("vote_count")
     val vote_count: Int
 ){
-    fun toMovieDetails(movie: Movie, crew: List<Crewman>, cast: List<Actor>) = MovieDetails(
-        movie = movie,
+    fun toMovieDetails(isFavorite: Boolean, crew: List<Crewman>, cast: List<Actor>) = MovieDetails(
+        movie = Movie(
+            id = id,
+            title = title,
+            overview = overview!!,
+            imageUrl = "$BASE_IMAGE_URL/$poster_path",
+            isFavorite = isFavorite
+        ),
         voteAverage = vote_average.toFloat(),
         releaseDate = release_date,
         language = original_language,
