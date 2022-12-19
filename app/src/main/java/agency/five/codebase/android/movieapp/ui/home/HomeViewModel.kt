@@ -43,7 +43,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.POPULAR_STREAMING
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = popularCategoryLabels,
@@ -67,7 +67,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.NOWPLAYING_MOVIES
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = nowPlayingCategoryLabels,
@@ -91,7 +91,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.UPCOMING_TODAY
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = upcomingCategoryLabels,
@@ -113,61 +113,61 @@ class HomeViewModel(
                 MovieCategory.POPULAR_ONTV.ordinal,
                 MovieCategory.POPULAR_INTHEATHERS.ordinal
                 -> {
-                        popularMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                popularCategoryLabels,
-                                MovieCategory.getByOrdinal(categoryId)!!,
-                                popularViewState.value.movies.map {
-                                    Movie(
-                                        it.movieId,
-                                        "",
-                                        "",
-                                        it.imageUrl,
-                                        it.isFavorite
-                                    )
-                                }
-                            )
+                    popularMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            popularCategoryLabels,
+                            MovieCategory.getByOrdinal(categoryId)!!,
+                            popularViewState.value.movies.map {
+                                Movie(
+                                    it.movieId,
+                                    "",
+                                    "",
+                                    it.imageUrl,
+                                    it.isFavorite
+                                )
+                            }
                         )
+                    )
                 }
 
                 MovieCategory.NOWPLAYING_MOVIES.ordinal,
                 MovieCategory.NOWPLAYING_TV.ordinal
                 -> {
-                        nowPlayingMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                movieCategories = nowPlayingCategoryLabels,
-                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                                movies = nowPlayingViewState.value.movies.map {
-                                    Movie(
-                                        it.movieId,
-                                        "",
-                                        "",
-                                        it.imageUrl,
-                                        it.isFavorite
-                                    )
-                                }
-                            )
+                    nowPlayingMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            movieCategories = nowPlayingCategoryLabels,
+                            selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                            movies = nowPlayingViewState.value.movies.map {
+                                Movie(
+                                    it.movieId,
+                                    "",
+                                    "",
+                                    it.imageUrl,
+                                    it.isFavorite
+                                )
+                            }
                         )
+                    )
                 }
 
                 MovieCategory.UPCOMING_TODAY.ordinal,
                 MovieCategory.UPCOMING_THISWEEK.ordinal
                 -> {
-                        upcomingMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                movieCategories = upcomingCategoryLabels,
-                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                                movies = upcomingViewState.value.movies.map {
-                                    Movie(
-                                        it.movieId,
-                                        "",
-                                        "",
-                                        it.imageUrl,
-                                        it.isFavorite
-                                    )
-                                }
-                            )
+                    upcomingMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            movieCategories = upcomingCategoryLabels,
+                            selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                            movies = upcomingViewState.value.movies.map {
+                                Movie(
+                                    it.movieId,
+                                    "",
+                                    "",
+                                    it.imageUrl,
+                                    it.isFavorite
+                                )
+                            }
                         )
+                    )
                 }
             }
         }
