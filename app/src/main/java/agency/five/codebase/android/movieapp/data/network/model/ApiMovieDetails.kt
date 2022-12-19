@@ -1,8 +1,6 @@
 package agency.five.codebase.android.movieapp.data.network.model
 
 import agency.five.codebase.android.movieapp.data.network.BASE_IMAGE_URL
-import agency.five.codebase.android.movieapp.model.Actor
-import agency.five.codebase.android.movieapp.model.Crewman
 import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieDetails
 import kotlinx.serialization.Contextual
@@ -87,7 +85,7 @@ data class ApiMovieDetails(
     @SerialName("vote_count")
     val vote_count: Int
 ){
-    fun toMovieDetails(isFavorite: Boolean, crew: List<Crewman>, cast: List<Actor>) = MovieDetails(
+    fun toMovieDetails(isFavorite: Boolean, crew: List<ApiCrew>, cast: List<ApiCast>) = MovieDetails(
         movie = Movie(
             id = id,
             title = title,
@@ -99,8 +97,8 @@ data class ApiMovieDetails(
         releaseDate = release_date,
         language = original_language,
         runtime = runtime!!,
-        crew = crew,
-        cast = cast
+        crew = crew.map { it.toCrewman() },
+        cast = cast.map { it.toActor() }
     )
 }
 
