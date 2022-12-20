@@ -16,4 +16,7 @@ val databaseModule = module {
             APP_DATABASE_NAME,
         ).build()
     }
+
+    fun provideFavoriteMovieDao(database: MovieAppDatabase) = database.favoriteMovieDao()
+    single { provideFavoriteMovieDao(get()) }
 }
