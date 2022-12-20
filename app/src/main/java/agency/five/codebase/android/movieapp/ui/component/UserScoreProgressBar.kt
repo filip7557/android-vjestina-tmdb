@@ -64,8 +64,8 @@ fun CircularProgressBar(
         }
 
         Text(
-            text = score.toString(),
-            fontSize = 13.sp,
+            text = String.format("%.2f", score),
+            fontSize = 11.sp,
             color = MaterialTheme.colors.onPrimary
         )
     }
