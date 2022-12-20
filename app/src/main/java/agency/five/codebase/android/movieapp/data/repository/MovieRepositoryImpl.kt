@@ -99,11 +99,28 @@ class MovieRepositoryImpl(
         }
     }
 
+    private suspend fun findMovie(movieId: Int): Movie? {
+        var movie: Movie? = null
+        moviesByCategory.values.forEach { value ->
+            val movies = value.first()
+            movies.forEach {
+                if (it.id == movieId) {
+                    movie = it
+                }
+            }
+
+        }
+        return movie
+    }
+
     override suspend fun toggleFavorite(movieId: Int) {
-        favoriteMovies().collect {
-            if(it.any { movie -> movie.id == movieId })
+        runBlocking(bgDispatcher) {
+            val movie = findMovie(movieId)
+            if (movie?.isFavorite == true) {
                 removeMovieFromFavorites(movieId)
-            else addMovieToFavorites(movieId)
+            } else {
+                addMovieToFavorites(movieId)
+            }
         }
     }
 }
