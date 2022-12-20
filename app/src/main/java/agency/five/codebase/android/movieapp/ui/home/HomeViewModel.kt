@@ -5,7 +5,9 @@ import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -89,30 +91,28 @@ class HomeViewModel(
     }
 
     fun onCategoryLabelClick(categoryId: Int) {
-        when (categoryId) {
-            MovieCategory.POPULAR_STREAMING.ordinal,
-            MovieCategory.POPULAR_FORRENT.ordinal,
-            MovieCategory.POPULAR_ONTV.ordinal,
-            MovieCategory.POPULAR_INTHEATHERS.ordinal
-            -> {
-                viewModelScope.launch {
-                    movieRepository.movies(MovieCategory.POPULAR_STREAMING).collect {
-                       popularMoviesCategorySelected.emit(
-                           homeScreenMapper.toHomeMovieCategoryViewState(
-                               movieCategories = popularCategoryLabels,
+        viewModelScope.launch {
+            when (categoryId) {
+                MovieCategory.POPULAR_STREAMING.ordinal,
+                MovieCategory.POPULAR_FORRENT.ordinal,
+                MovieCategory.POPULAR_ONTV.ordinal,
+                MovieCategory.POPULAR_INTHEATHERS.ordinal
+                -> {
+                    movieRepository.movies(MovieCategory.getByOrdinal(categoryId)!!).collect {
+                        popularMoviesCategorySelected.emit(
+                            homeScreenMapper.toHomeMovieCategoryViewState(
+                                movieCategories = popularCategoryLabels,
                                 selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
                                 movies = it
-                           )
-                       )
+                            )
+                        )
                     }
                 }
-            }
 
-            MovieCategory.NOWPLAYING_MOVIES.ordinal,
-            MovieCategory.NOWPLAYING_TV.ordinal
-            -> {
-                viewModelScope.launch {
-                    movieRepository.movies(MovieCategory.NOWPLAYING_MOVIES).collect {
+                MovieCategory.NOWPLAYING_MOVIES.ordinal,
+                MovieCategory.NOWPLAYING_TV.ordinal
+                -> {
+                    movieRepository.movies(MovieCategory.getByOrdinal(categoryId)!!).collect {
                         nowPlayingMoviesCategorySelected.emit(
                             homeScreenMapper.toHomeMovieCategoryViewState(
                                 movieCategories = nowPlayingCategoryLabels,
@@ -122,13 +122,11 @@ class HomeViewModel(
                         )
                     }
                 }
-            }
 
-            MovieCategory.UPCOMING_TODAY.ordinal,
-            MovieCategory.UPCOMING_THISWEEK.ordinal
-            -> {
-                viewModelScope.launch {
-                    movieRepository.movies(MovieCategory.UPCOMING_TODAY).collect {
+                MovieCategory.UPCOMING_TODAY.ordinal,
+                MovieCategory.UPCOMING_THISWEEK.ordinal
+                -> {
+                    movieRepository.movies(MovieCategory.getByOrdinal(categoryId)!!).collect {
                         upcomingMoviesCategorySelected.emit(
                             homeScreenMapper.toHomeMovieCategoryViewState(
                                 movieCategories = upcomingCategoryLabels,
