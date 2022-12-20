@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +29,7 @@ fun CircularProgressBar(
 ){
     val animationPlayed = remember { mutableStateOf(false) }
     val currentPercentage = animateFloatAsState(
-        targetValue = (if(animationPlayed.value) score.toFloat() else 0f),
+        targetValue = (if(animationPlayed.value) score/10 else 0f),
         animationSpec = tween(
             durationMillis = 650
         )
@@ -65,7 +64,7 @@ fun CircularProgressBar(
         }
 
         Text(
-            text = (score * 10).toString(),
+            text = score.toString(),
             fontSize = 13.sp,
             color = MaterialTheme.colors.onPrimary
         )
