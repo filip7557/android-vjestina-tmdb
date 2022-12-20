@@ -5,7 +5,6 @@ import agency.five.codebase.android.movieapp.ui.component.ActorCard
 import agency.five.codebase.android.movieapp.ui.component.CircularProgressBar
 import agency.five.codebase.android.movieapp.ui.component.CrewItem
 import agency.five.codebase.android.movieapp.ui.component.FavoriteButton
-import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -207,11 +205,4 @@ fun MovieImage(
                 )
             }
         }
-}
-
-@Preview
-@Composable
-fun MovieDetailsScreenPreview() {
-    MovieAppTheme {
-    }
 }
