@@ -1,17 +1,25 @@
 package agency.five.codebase.android.movieapp.data.di
 
-import agency.five.codebase.android.movieapp.data.network.MovieServiceImpl
 import agency.five.codebase.android.movieapp.data.repository.MovieRepository
 import agency.five.codebase.android.movieapp.data.repository.MovieRepositoryImpl
 import kotlinx.coroutines.Dispatchers
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<MovieRepository> {
+
+    single<MovieRepository>(named("dispatcherIo")) {
         MovieRepositoryImpl(
-            movieService = MovieServiceImpl(client = get()),
+            movieService = get(),
             movieDao = get(),
-            bgDispatcher = Dispatchers.IO,
+            bgDispatcher = Dispatchers.IO
+        )
+    }
+    single<MovieRepository>(named("dispatcherMain")) {
+        MovieRepositoryImpl(
+            movieService = get(),
+            movieDao = get(),
+            bgDispatcher = Dispatchers.Main
         )
     }
 }

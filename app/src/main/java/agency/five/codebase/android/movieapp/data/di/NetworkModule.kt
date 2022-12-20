@@ -2,6 +2,7 @@ package agency.five.codebase.android.movieapp.data.di
 
 import agency.five.codebase.android.movieapp.data.network.MovieService
 import agency.five.codebase.android.movieapp.data.network.MovieServiceImpl
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -16,18 +17,19 @@ val networkModule = module {
 
     single {
         HttpClient(Android) {
-            expectSuccess = true
             install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.HEADERS
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.d("HTTP", message)
+                    }
+                }
+                level = LogLevel.ALL
             }
-
             install(ContentNegotiation) {
                 json(Json {
-                    prettyPrint = true
+                    ignoreUnknownKeys = true
                     isLenient = true
-                }
-                )
+                })
             }
         }
     }
