@@ -8,8 +8,8 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
-private const val BASE_URL = "https://api.themoviedb.org/3"
+const val BASE_IMAGE_URL = "image.tmdb.org/t/p/w500"
+private const val BASE_URL = "api.themoviedb.org/3"
 private const val API_KEY = "77229919eb9b0ff7a109794fa8c881c4"
 
 class MovieServiceImpl(private val client: HttpClient) : MovieService {
