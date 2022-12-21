@@ -1,7 +1,6 @@
 package agency.five.codebase.android.movieapp.ui.home
 
 import agency.five.codebase.android.movieapp.data.repository.MovieRepository
-import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapper
 import androidx.lifecycle.ViewModel
@@ -117,15 +116,7 @@ class HomeViewModel(
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             popularCategoryLabels,
                             MovieCategory.getByOrdinal(categoryId)!!,
-                            popularViewState.value.movies.map {
-                                Movie(
-                                    it.movieId,
-                                    "",
-                                    "",
-                                    it.imageUrl,
-                                    it.isFavorite
-                                )
-                            }
+                            listOf()
                         )
                     )
                 }
@@ -137,15 +128,7 @@ class HomeViewModel(
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = nowPlayingCategoryLabels,
                             selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                            movies = nowPlayingViewState.value.movies.map {
-                                Movie(
-                                    it.movieId,
-                                    "",
-                                    "",
-                                    it.imageUrl,
-                                    it.isFavorite
-                                )
-                            }
+                            movies = listOf()
                         )
                     )
                 }
@@ -157,15 +140,7 @@ class HomeViewModel(
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = upcomingCategoryLabels,
                             selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                            movies = upcomingViewState.value.movies.map {
-                                Movie(
-                                    it.movieId,
-                                    "",
-                                    "",
-                                    it.imageUrl,
-                                    it.isFavorite
-                                )
-                            }
+                            movies = listOf()
                         )
                     )
                 }
