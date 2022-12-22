@@ -3,8 +3,11 @@ package agency.five.codebase.android.movieapp.ui.main
 import agency.five.codebase.android.movieapp.R
 import agency.five.codebase.android.movieapp.navigation.*
 import agency.five.codebase.android.movieapp.ui.favorites.FavoritesRoute
+import agency.five.codebase.android.movieapp.ui.favorites.FavoritesViewModel
 import agency.five.codebase.android.movieapp.ui.home.HomeScreenRoute
+import agency.five.codebase.android.movieapp.ui.home.HomeViewModel
 import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsRoute
+import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,6 +31,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainScreen() {
@@ -42,6 +47,9 @@ fun MainScreen() {
     }
 
     val showBackIcon = !showBottomBar
+
+    val homeViewModel = getViewModel<HomeViewModel>()
+    val favoritesViewModel = getViewModel<FavoritesViewModel>()
 
     Scaffold(
         topBar = {
@@ -83,17 +91,16 @@ fun MainScreen() {
             ) {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeScreenRoute(
+                        viewModel = homeViewModel,
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         },
-                        onFavoriteButtonClicked = {
-                            //add/remove movie from favorites
-                        }
                     )
                 }
 
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
+                        viewModel = favoritesViewModel,
                         onNavigateToMovieDetails = {
                             navController.navigate(it)
                         }
@@ -104,11 +111,9 @@ fun MainScreen() {
                     route = MovieDetailsDestination.route,
                     arguments = listOf(navArgument(MOVIE_ID_KEY) { type = NavType.IntType }),
                 ) {
-                    MovieDetailsRoute(
-                        onFavoriteButtonClick = {
-                            //needs to add/remove movie from favorites
-                        }
-                    )
+                    val movieId = it.arguments?.getInt(MOVIE_ID_KEY)
+                    val viewModel = getViewModel<MovieDetailsViewModel>(parameters = { parametersOf(movieId) })
+                    MovieDetailsRoute(viewModel)
                 }
             }
         }

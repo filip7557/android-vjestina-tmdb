@@ -10,9 +10,22 @@ data class MovieDetailsViewState(
     val title: String,
     val overview: String,
     val isFavorite: Boolean,
-    val crew: List<CrewmanViewState>,
-    val cast: List<ActorViewState>
-)
+    val crew: List<CrewItemViewState>,
+    val cast: List<ActorCardViewState>,
+) {
+    companion object Empty {
+        fun create() = MovieDetailsViewState(
+            id = 1,
+            imageUrl = null,
+            voteAverage = 0.0f,
+            title = "",
+            overview = "",
+            isFavorite = false,
+            crew = listOf(),
+            cast = listOf()
+        )
+    }
+}
 
 data class ActorViewState(
     val actorCardViewState: ActorCardViewState,

@@ -16,8 +16,8 @@ class MovieDetailsMapperImpl : MovieDetailsMapper {
             movieDetails.movie.title,
             movieDetails.movie.overview,
             movieDetails.movie.isFavorite,
-            movieDetails.crew.map { CrewmanViewState(CrewItemViewState(it.name, it.job)) },
-            movieDetails.cast.map { ActorViewState(ActorCardViewState(it.imageUrl, it.name, it.character)) },
+            movieDetails.crew.map { CrewItemViewState(it.name, it.job) },
+            movieDetails.cast.map { ActorCardViewState(it.imageUrl, it.name, it.character) },
         )
     }
 }
