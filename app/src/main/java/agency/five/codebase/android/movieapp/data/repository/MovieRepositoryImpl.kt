@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 
 class MovieRepositoryImpl(
     private val movieService: MovieService,
@@ -83,20 +82,16 @@ class MovieRepositoryImpl(
     override fun favoriteMovies(): Flow<List<Movie>> = favorites
 
     override suspend fun addMovieToFavorites(movieId: Int) {
-        runBlocking(bgDispatcher) {
-            movieDao.insertMovie(
-                DbFavoriteMovie(
-                    movieId,
-                    "$BASE_IMAGE_URL/${movieService.fetchMovieDetails(movieId).poster_path}"
-                )
+        movieDao.insertMovie(
+            DbFavoriteMovie(
+                movieId,
+                "$BASE_IMAGE_URL/${movieService.fetchMovieDetails(movieId).poster_path}"
             )
-        }
+        )
     }
 
     override suspend fun removeMovieFromFavorites(movieId: Int) {
-        runBlocking(bgDispatcher) {
-            movieDao.delete(movieId)
-        }
+        movieDao.delete(movieId)
     }
 
     private suspend fun findMovie(movieId: Int): Movie? {
