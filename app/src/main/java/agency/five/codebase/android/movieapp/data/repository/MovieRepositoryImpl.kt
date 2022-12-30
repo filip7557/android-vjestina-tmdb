@@ -114,13 +114,11 @@ class MovieRepositoryImpl(
     }
 
     override suspend fun toggleFavorite(movieId: Int) {
-        runBlocking(bgDispatcher) {
-            val movie = findMovie(movieId)
-            if (movie?.isFavorite == true) {
-                removeMovieFromFavorites(movieId)
-            } else {
-                addMovieToFavorites(movieId)
-            }
+        val movie = findMovie(movieId)
+        if (movie?.isFavorite == true) {
+            removeMovieFromFavorites(movieId)
+        } else {
+            addMovieToFavorites(movieId)
         }
     }
 }
