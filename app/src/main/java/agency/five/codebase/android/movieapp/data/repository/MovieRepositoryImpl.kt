@@ -118,7 +118,8 @@ class MovieRepositoryImpl(
         if (movie?.isFavorite == true) {
             removeMovieFromFavorites(movieId)
         } else {
-            addMovieToFavorites(movieId)
+            if(movie != null)
+                addMovieToFavorites(movieId)
         }
     }
 }
