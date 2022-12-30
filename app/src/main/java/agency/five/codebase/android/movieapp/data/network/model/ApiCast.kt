@@ -17,12 +17,12 @@ data class ApiCast(
     val name: String,
 
     @SerialName("profile_path")
-    val profile_path: String?
+    val profilePath: String?
 ){
     fun toActor() = Actor(
         id = id,
         name = name,
         character = character,
-        imageUrl = "$BASE_IMAGE_URL/$profile_path"
+        imageUrl = "$BASE_IMAGE_URL/$profilePath"
     )
 }
