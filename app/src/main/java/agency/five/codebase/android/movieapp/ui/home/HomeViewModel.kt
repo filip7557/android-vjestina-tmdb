@@ -42,7 +42,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.POPULAR_STREAMING
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = popularCategoryLabels,
@@ -66,7 +66,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.NOWPLAYING_MOVIES
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = nowPlayingCategoryLabels,
@@ -90,7 +90,7 @@ class HomeViewModel(
                 } catch (e: NoSuchElementException) {
                     MovieCategory.UPCOMING_TODAY
                 }
-                movieRepository.popularMovies(category)
+                movieRepository.movies(category)
                     .map {
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = upcomingCategoryLabels,
@@ -112,37 +112,37 @@ class HomeViewModel(
                 MovieCategory.POPULAR_ONTV.ordinal,
                 MovieCategory.POPULAR_INTHEATHERS.ordinal
                 -> {
-                        popularMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                popularCategoryLabels,
-                                MovieCategory.getByOrdinal(categoryId)!!,
-                                listOf()
-                            )
+                    popularMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            popularCategoryLabels,
+                            MovieCategory.getByOrdinal(categoryId)!!,
+                            listOf()
                         )
+                    )
                 }
 
                 MovieCategory.NOWPLAYING_MOVIES.ordinal,
                 MovieCategory.NOWPLAYING_TV.ordinal
                 -> {
-                        nowPlayingMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                movieCategories = nowPlayingCategoryLabels,
-                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                                movies = listOf()
-                            )
+                    nowPlayingMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            movieCategories = nowPlayingCategoryLabels,
+                            selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                            movies = listOf()
                         )
+                    )
                 }
 
                 MovieCategory.UPCOMING_TODAY.ordinal,
                 MovieCategory.UPCOMING_THISWEEK.ordinal
                 -> {
-                        upcomingMoviesCategorySelected.emit(
-                            homeScreenMapper.toHomeMovieCategoryViewState(
-                                movieCategories = upcomingCategoryLabels,
-                                selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
-                                movies = listOf()
-                            )
+                    upcomingMoviesCategorySelected.emit(
+                        homeScreenMapper.toHomeMovieCategoryViewState(
+                            movieCategories = upcomingCategoryLabels,
+                            selectedMovieCategory = MovieCategory.getByOrdinal(categoryId)!!,
+                            movies = listOf()
                         )
+                    )
                 }
             }
         }
